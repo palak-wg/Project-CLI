@@ -8,30 +8,34 @@ import (
 
 func PatientMenu(user models.User) {
 	for {
-		fmt.Println("\n========Patient Functionality=========")
+		fmt.Println("\n===========================================")
+		fmt.Println("\tYour Dashboard")
+		fmt.Println("===========================================")
 		fmt.Println("1. View Profile")
 		fmt.Println("2. Check Notifications")
 		fmt.Println("3. View All Doctors")
 		fmt.Println("4. Send Message to Doctor")
-		fmt.Println("5. Add Review")
-		fmt.Println("6. Update Profile")
-		fmt.Println("7. Logout")
+		fmt.Println("5. Send Appointment Request")
+		fmt.Println("6. Add Review")
+		fmt.Println("7. Update Profile")
+		fmt.Println("8. Logout")
+		fmt.Print("Enter your choice: ")
 
 		var choice int
 		fmt.Scanln(&choice)
 
 		switch choice {
 		case 1:
-			patient, err := models.GetPatientByID(user.UserID)
+			_, err := models.GetPatientByID(user.UserID)
 			if err != nil {
 				fmt.Println("Error fetching profile:", err)
 				continue
 			}
-			fmt.Printf("Profile: %v\n", patient)
+			models.ViewProfile(user)
 
 		case 2:
+			fmt.Println("\n============== NOTIFICATIONS ================")
 			notifications, err := models.GetNotificationsByUserID(user.UserID)
-			fmt.Printf("Notifications: %v\n", notifications)
 			if err != nil {
 				fmt.Println("Error fetching notifications:", err)
 				continue
@@ -41,6 +45,7 @@ func PatientMenu(user models.User) {
 			}
 
 		case 3:
+			fmt.Println("\n============== DOCTOR(S) ================")
 			doctors, err := models.GetAllDoctors()
 			if err != nil {
 				fmt.Println("Error fetching doctors:", err)
@@ -55,7 +60,7 @@ func PatientMenu(user models.User) {
 			var doctorID string
 			fmt.Scanln(&doctorID)
 
-			fmt.Println("Enter your message:")
+			fmt.Println("Enter your message: ")
 			var message string
 			fmt.Scanln(&message)
 
@@ -67,15 +72,25 @@ func PatientMenu(user models.User) {
 			}
 
 		case 5:
-			fmt.Println("Enter Doctor User ID to add a review:")
+			fmt.Println("Enter Doctor User ID to send appointment request: ")
 			var doctorID string
 			fmt.Scanln(&doctorID)
 
-			fmt.Println("Enter your review:")
+			err := models.SendAppointmentRequest(user.UserID, doctorID)
+			if err != nil {
+				fmt.Println("Error sending appointment:", err)
+			}
+
+		case 6:
+			fmt.Println("Enter Doctor User ID to add a review: ")
+			var doctorID string
+			fmt.Scanln(&doctorID)
+
+			fmt.Println("Enter your review: ")
 			var review string
 			fmt.Scanln(&review)
 
-			fmt.Println("Enter your rating (1-5):")
+			fmt.Println("Enter your rating (1-5): ")
 			var rating int
 			fmt.Scanln(&rating)
 
@@ -86,24 +101,25 @@ func PatientMenu(user models.User) {
 				fmt.Println("Review added.")
 			}
 
-		case 6:
+		case 7:
 			fmt.Println("\nUpdate your profile:")
-			fmt.Println("1. Update Username")
+			fmt.Println("1. Update First Name")
 			fmt.Println("2. Update Age")
 			fmt.Println("3. Update Gender")
 			fmt.Println("4. Update Email")
 			fmt.Println("5. Update Phone Number")
 			fmt.Println("6. Update Password")
+			fmt.Print("Enter your choice: ")
 
 			var updateChoice int
 			fmt.Scanln(&updateChoice)
 
 			switch updateChoice {
 			case 1:
-				fmt.Print("Enter new username: ")
-				var newUsername string
-				fmt.Scanln(&newUsername)
-				err := models.UpdateUsername(user.UserID, newUsername)
+				fmt.Print("Enter new firstname: ")
+				var newFirstname string
+				fmt.Scanln(&newFirstname)
+				err := models.UpdateUsername(user.UserID, newFirstname)
 				if err != nil {
 					fmt.Println("Error updating username:", err)
 				} else {
@@ -163,7 +179,7 @@ func PatientMenu(user models.User) {
 				fmt.Println("Invalid choice. Please try again.")
 			}
 
-		case 7:
+		case 8:
 			return
 		default:
 			fmt.Println("Invalid choice. Please try again.")

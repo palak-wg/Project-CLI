@@ -7,11 +7,12 @@ import (
 )
 
 func Signup() {
+	fmt.Println("\n\n===============SIGNUP================")
 	fmt.Println("\n==========Enter Your Details=========")
 	user := models.User{}
 
 	for {
-		fmt.Print("Enter Role (doctor/patient):")
+		fmt.Print("Enter Role (doctor/patient): ")
 		fmt.Scanln(&user.UserType)
 
 		if !(utils.ValidateRole(user.UserType)) {
@@ -95,19 +96,20 @@ func Signup() {
 
 	err := models.CreateUser(user)
 	if err != nil {
-		fmt.Println("Error creating user:", err)
+		fmt.Println("Error creating user: ", err)
 		return
 	}
 
 }
 
 func Login() models.User {
+	fmt.Println("\n\n===============LOGIN=================")
 	fmt.Println("\n==========Enter Your Details=========")
-	fmt.Print("Enter User ID:")
+	fmt.Print("Enter User ID: ")
 	var userID string
 	fmt.Scanln(&userID)
 
-	fmt.Print("Enter Password:")
+	fmt.Print("Enter Password: ")
 	var password string
 	fmt.Scanln(&password)
 

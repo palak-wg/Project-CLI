@@ -2,6 +2,7 @@ package models
 
 import (
 	"doctor-patient-cli/utils"
+	"fmt"
 )
 
 func AddReview(patientID, doctorID, content string, rating int) error {
@@ -12,6 +13,7 @@ func AddReview(patientID, doctorID, content string, rating int) error {
 
 func GetAllReviews() ([]Review, error) {
 	db := utils.GetDB()
+	fmt.Println("All reviews:")
 	rows, err := db.Query("SELECT patient_id, doctor_id, content, rating FROM reviews")
 	if err != nil {
 		return nil, err

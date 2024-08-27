@@ -29,6 +29,7 @@ type Review struct {
 	DoctorID  string
 	Content   string
 	Rating    int
+	Timestamp []uint8
 }
 
 type Notification struct {
@@ -38,9 +39,17 @@ type Notification struct {
 }
 
 type Appointment struct {
-	AppointmentID string
+	AppointmentID int
 	DoctorID      string
 	PatientID     string
 	DateTime      []uint8
 	IsApproved    bool
+}
+
+type Message struct {
+	Sender    string
+	Content   string
+	Receiver  string
+	Timestamp []uint8
+	Status    string
 }

@@ -6,6 +6,7 @@ import (
 	"time"
 )
 
+// ApproveDoctorSignup update the unapproved doctors based on the provided user ID to approved ones
 func ApproveDoctorSignup(userID string) error {
 	// Update the doctor record to set IsApproved to true
 	db := utils.GetDB()
@@ -36,4 +37,26 @@ func ApproveDoctorSignup(userID string) error {
 	go utils.SendEmail(doctor.Email, "Signup Approved", "Your signup request has been approved by the admin.")
 
 	return nil
+}
+
+// PendingDoctorSignupRequest display unapproved doctor signup request
+func PendingDoctorSignupRequest() {
+	db := utils.GetDB()
+
+	// Fetching all pending requests
+	rows, err := db.Query("SELECT user_id FROM users WHERE user_type ='doctor' AND is_approved=0 ")
+	if err != nil {
+		fmt.Println("Error getting pending request.")
+	}
+	defer rows.Close()
+
+	// Displaying all pending requests
+	for rows.Next() {
+		var ID string
+		err = rows.Scan(&ID)
+		if err != nil {
+			fmt.Println("Error getting pending request.")
+		}
+		fmt.Println("Request pending for Doctor ID: ", ID)
+	}
 }
