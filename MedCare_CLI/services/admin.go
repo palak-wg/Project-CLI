@@ -1,15 +1,15 @@
-package models
+package services
 
 import (
 	"doctor-patient-cli/utils"
-	"fmt"
-	"time"
+	"github.com/fatih/color"
 )
 
 // ApproveDoctorSignup update the unapproved doctors based on the provided user ID to approved ones
 func ApproveDoctorSignup(userID string) error {
-	// Update the doctor record to set IsApproved to true
 	db := utils.GetDB()
+
+	// Update the doctor record to set IsApproved to true
 	_, err := db.Exec("UPDATE users SET is_approved = ? WHERE user_id = ?", true, userID)
 
 	// making entry to doctor table
@@ -17,20 +17,23 @@ func ApproveDoctorSignup(userID string) error {
 		userID, "xxx", 0, 2)
 
 	if err != nil {
-		return fmt.Errorf("error approving doctor signup: %v", err)
+		color.Red("error approving doctor signup: %v", err)
+		return err
 	}
 
 	// Create a notification for the doctor
-	_, err = db.Exec("INSERT INTO notifications (user_id, content, timestamp) VALUES (?, ?, ?)",
-		userID, "Your signup request has been approved by the admin.", time.Now())
+	_, err = db.Exec("INSERT INTO notifications (user_id, content) VALUES (?, ?)",
+		userID, "Your signup request has been approved by the admin.")
 	if err != nil {
-		return fmt.Errorf("error creating notification: %v", err)
+		color.Red("Error creating notification: %v", err)
+		return err
 	}
 
 	// Assuming we have a function to fetch doctor email to send notification
 	doctor, err := GetUserByID(userID)
 	if err != nil {
-		return fmt.Errorf("error fetching doctor: %v", err)
+		color.Red("Error fetching doctor: %v", err)
+		return err
 	}
 
 	// Send email notification to the doctor
@@ -46,17 +49,17 @@ func PendingDoctorSignupRequest() {
 	// Fetching all pending requests
 	rows, err := db.Query("SELECT user_id FROM users WHERE user_type ='doctor' AND is_approved=0 ")
 	if err != nil {
-		fmt.Println("Error getting pending request.")
+		color.Red("Error getting pending requests: %v", err)
+		return
 	}
 	defer rows.Close()
 
 	// Displaying all pending requests
+	color.Cyan("\n============== PENDING DOCTOR SIGNUPS ================")
 	for rows.Next() {
 		var ID string
-		err = rows.Scan(&ID)
-		if err != nil {
-			fmt.Println("Error getting pending request.")
-		}
-		fmt.Println("Request pending for Doctor ID: ", ID)
+		_ = rows.Scan(&ID)
+
+		color.Magenta("Request pending for Doctor ID: %s", ID)
 	}
 }

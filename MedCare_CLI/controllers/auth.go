@@ -2,91 +2,95 @@ package controllers
 
 import (
 	"doctor-patient-cli/models"
+	"doctor-patient-cli/services"
 	"doctor-patient-cli/utils"
 	"fmt"
+	"github.com/fatih/color"
+	"golang.org/x/crypto/ssh/terminal"
+	"os"
 )
 
 func Signup() {
-	fmt.Println("\n\n===============SIGNUP================")
-	fmt.Println("\n==========Enter Your Details=========")
+	color.Cyan("\n========== Enter Your Details ==========")
 	user := models.User{}
 
 	for {
-		fmt.Print("Enter Role (doctor/patient): ")
+		color.Magenta("Enter Role (doctor/patient): ")
 		fmt.Scanln(&user.UserType)
 
 		if !(utils.ValidateRole(user.UserType)) {
-			fmt.Println("Invalid Role. It must be doctor or patient.")
+			color.Red("🚨 Invalid Role. It must be doctor or patient.")
 			continue
 		}
 		break
 	}
 
 	for {
-		fmt.Print("Enter UserID: ")
+		color.Magenta("Enter UserID: ")
 		fmt.Scanln(&user.UserID)
 		if !utils.ValidateUserID(user.UserID) {
-			fmt.Println("Invalid userID")
+			color.Red("🚨 Invalid UserID")
 			continue
 		}
 		break
 	}
 
 	for {
-		fmt.Print("Enter Password: ")
-		fmt.Scanln(&user.Password)
+		color.Magenta("Enter Password: ")
+		passwordBytes, _ := terminal.ReadPassword(int(os.Stdin.Fd()))
+		user.Password = string(passwordBytes)
 		if !utils.ValidatePassword(user.Password) {
-			fmt.Println("Password criteria doesn't match")
+			color.Red("🚨 Password criteria doesn't match")
 			continue
 		}
 		break
 	}
 
 	for {
-		fmt.Print("Enter First Name: ")
+		color.Magenta("Enter First Name: ")
 		fmt.Scanln(&user.Username)
 		if !utils.ValidateUsername(user.Username) {
-			fmt.Println("Invalid username")
+			color.Red("🚨 Invalid Username")
 			continue
 		}
 		break
 	}
 
 	for {
-		fmt.Print("Enter Age: ")
+		color.Magenta("Enter Age: ")
 		fmt.Scanln(&user.Age)
 		if !utils.ValidateAge(user.Age) {
-			fmt.Println("Invalid Age")
+			color.Red("🚨 Invalid Age")
 			continue
 		}
 		break
 	}
 
 	for {
-		fmt.Print("Enter Gender: ")
+		color.Magenta("Enter Gender: ")
 		fmt.Scanln(&user.Gender)
 		if !utils.ValidateGender(user.Gender) {
-			fmt.Println("Invalid gender")
+			color.Red("🚨 Invalid Gender")
 			continue
 		}
 		break
 	}
 
 	for {
-		fmt.Print("Enter Email: ")
+		color.Magenta("Enter Email: ")
 		fmt.Scanln(&user.Email)
 		if !utils.ValidateEmail(user.Email) {
-			fmt.Println("Invalid email")
+			color.Red("🚨 Invalid Email")
 			continue
 		}
 		break
 	}
 
 	for {
-		fmt.Print("Enter Phone Number (10 digits): ")
+		color.Magenta("Enter Phone Number (10 digits): ")
 		fmt.Scanln(&user.PhoneNumber)
 		if !utils.ValidatePhoneNumber(user.PhoneNumber) {
-			fmt.Println("Invalid PhoneNumber")
+			color.Red("🚨 Invalid Phone Number")
 			continue
 		}
 		break
@@ -94,35 +98,36 @@ func Signup() {
 
 	user.Password = utils.HashPassword(user.Password)
 
-	err := models.CreateUser(user)
+	err := services.CreateUser(user)
 	if err != nil {
-		fmt.Println("Error creating user: ", err)
+		color.Red("🚨 Error creating user: %v", err)
 		return
 	}
 
+	color.Green("✅ User created successfully!")
 }
 
 func Login() models.User {
-	fmt.Println("\n\n===============LOGIN=================")
-	fmt.Println("\n==========Enter Your Details=========")
-	fmt.Print("Enter User ID: ")
+	color.Cyan("\n========== Enter Your Details ==========")
+	color.Magenta("Enter User ID: ")
 	var userID string
 	fmt.Scanln(&userID)
 
-	fmt.Print("Enter Password: ")
-	var password string
-	fmt.Scanln(&password)
+	color.Magenta("Enter Password: ")
+	passwordBytes, _ := terminal.ReadPassword(int(os.Stdin.Fd()))
+	password := string(passwordBytes)
 
-	user, err := models.GetUserByID(userID)
+	user, err := services.GetUserByID(userID)
 	if err != nil {
-		fmt.Println("Login failed:", err)
+		color.Red("🚨 Login failed: %v", err)
 		return models.User{}
 	}
 
 	if !utils.CheckPasswordHash(password, user.Password) {
-		fmt.Println("Invalid password.")
+		color.Red("🚨 Invalid password.")
 		return models.User{}
 	}
 
+	color.Green("✅ Login successful!")
 	return user
 }

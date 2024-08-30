@@ -1,7 +1,8 @@
-package tests
+package services
 
 import (
-	"doctor-patient-cli/models"
+	"doctor-patient-cli/services"
+	"doctor-patient-cli/tests/mockDB"
 	"doctor-patient-cli/utils"
 	"fmt"
 	"testing"
@@ -11,30 +12,30 @@ import (
 )
 
 func TestAddReview(t *testing.T) {
-	MockInitDB(t)
+	mockDB.MockInitDB(t)
 	defer utils.CloseDB()
 
 	t.Run("AddReview Success", func(t *testing.T) {
 		// Set up mock expectation for the insert query
-		mock.ExpectExec("INSERT INTO reviews").
+		mockDB.Mock.ExpectExec("INSERT INTO reviews").
 			WithArgs("patient1", "doctor1", "Great doctor!", 5).
 			WillReturnResult(sqlmock.NewResult(1, 1))
 
 		// Call the AddReview function
-		err := models.AddReview("patient1", "doctor1", "Great doctor!", 5)
+		err := services.AddReview("patient1", "doctor1", "Great doctor!", 5)
 
 		// Check if there was no error
 		assert.NoError(t, err)
 
 		// Ensure all expectations are met
-		if err := mock.ExpectationsWereMet(); err != nil {
+		if err := mockDB.Mock.ExpectationsWereMet(); err != nil {
 			t.Errorf("there were unfulfilled expectations: %v", err)
 		}
 	})
 }
 
 func TestGetAllReviews(t *testing.T) {
-	MockInitDB(t)
+	mockDB.MockInitDB(t)
 	defer utils.CloseDB()
 
 	t.Run("GetAllReviews Success", func(t *testing.T) {
@@ -44,11 +45,11 @@ func TestGetAllReviews(t *testing.T) {
 			AddRow("patient2", "doctor2", "Not bad", 4)
 
 		// Expect the query and set up the rows to return
-		mock.ExpectQuery("SELECT patient_id, doctor_id, content, rating FROM reviews").
+		mockDB.Mock.ExpectQuery("SELECT patient_id, doctor_id, content, rating FROM reviews").
 			WillReturnRows(rows)
 
 		// Call the GetAllReviews function
-		reviews, err := models.GetAllReviews()
+		reviews, err := services.GetAllReviews()
 
 		// Check if there was no error
 		assert.NoError(t, err)
@@ -57,24 +58,24 @@ func TestGetAllReviews(t *testing.T) {
 		assert.Equal(t, "Great doctor!", reviews[0].Content)
 
 		// Ensure all expectations are met
-		if err := mock.ExpectationsWereMet(); err != nil {
+		if err := mockDB.Mock.ExpectationsWereMet(); err != nil {
 			t.Errorf("there were unfulfilled expectations: %v", err)
 		}
 	})
 
 	t.Run("GetAllReviews Query Error", func(t *testing.T) {
 		// Expect the query and simulate an error
-		mock.ExpectQuery("SELECT patient_id, doctor_id, content, rating FROM reviews").
+		mockDB.Mock.ExpectQuery("SELECT patient_id, doctor_id, content, rating FROM reviews").
 			WillReturnError(fmt.Errorf("query error"))
 
 		// Call the GetAllReviews function
-		_, err := models.GetAllReviews()
+		_, err := services.GetAllReviews()
 
 		// Check if an error was returned
 		assert.Error(t, err)
 
 		// Ensure all expectations are met
-		if err := mock.ExpectationsWereMet(); err != nil {
+		if err := mockDB.Mock.ExpectationsWereMet(); err != nil {
 			t.Errorf("there were unfulfilled expectations: %v", err)
 		}
 	})

@@ -1,22 +1,23 @@
-package models
+package services
 
 import (
+	"doctor-patient-cli/models"
 	"doctor-patient-cli/utils"
 	"fmt"
 )
 
-func GetDoctorByID(userID string) (Doctor, error) {
+func GetDoctorByID(userID string) (models.Doctor, error) {
 	db := utils.GetDB()
-	doctor := Doctor{}
+	doctor := models.Doctor{}
 	err := db.QueryRow("SELECT user_id, specialization, experience, rating FROM doctors WHERE user_id = ?", userID).
 		Scan(&doctor.UserID, &doctor.Specialization, &doctor.Experience, &doctor.Rating)
 	if err != nil {
-		return Doctor{}, err
+		return models.Doctor{}, err
 	}
 	return doctor, nil
 }
 
-func GetAllDoctors() ([]Doctor, error) {
+func GetAllDoctors() ([]models.Doctor, error) {
 	db := utils.GetDB()
 	rows, err := db.Query("SELECT user_id, specialization, experience, rating FROM doctors")
 	if err != nil {
@@ -24,13 +25,10 @@ func GetAllDoctors() ([]Doctor, error) {
 	}
 	defer rows.Close()
 
-	var doctors []Doctor
+	var doctors []models.Doctor
 	for rows.Next() {
-		var doctor Doctor
-		err = rows.Scan(&doctor.UserID, &doctor.Specialization, &doctor.Experience, &doctor.Rating)
-		if err != nil {
-			return nil, err
-		}
+		var doctor models.Doctor
+		_ = rows.Scan(&doctor.UserID, &doctor.Specialization, &doctor.Experience, &doctor.Rating)
 		doctors = append(doctors, doctor)
 	}
 	return doctors, nil
@@ -50,7 +48,7 @@ func UpdateDoctorSpecialization(userID, specialization string) error {
 
 func ViewDoctorSpecificProfile(userID string) {
 	db := utils.GetDB()
-	doctor := Doctor{}
+	doctor := models.Doctor{}
 	_ = db.QueryRow("SELECT specialization, experience, rating FROM doctors WHERE user_id = ?", userID).
 		Scan(&doctor.Specialization, &doctor.Experience, &doctor.Rating)
 

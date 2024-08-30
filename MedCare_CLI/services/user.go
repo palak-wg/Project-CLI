@@ -1,11 +1,12 @@
-package models
+package services
 
 import (
+	"doctor-patient-cli/models"
 	"doctor-patient-cli/utils"
 	"fmt"
 )
 
-func CreateUser(user User) error {
+func CreateUser(user models.User) error {
 	db := utils.GetDB()
 
 	_, err := db.Exec("INSERT INTO users (user_id, password, username, age, gender, email, phone_number, user_type, is_approved) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)",
@@ -31,13 +32,13 @@ func CreateUser(user User) error {
 	return err
 }
 
-func GetUserByID(userID string) (User, error) {
+func GetUserByID(userID string) (models.User, error) {
 	db := utils.GetDB()
-	user := User{}
+	user := models.User{}
 	err := db.QueryRow("SELECT user_id, password, username, age, gender, email, phone_number, user_type, is_approved FROM users WHERE user_id = ?", userID).
 		Scan(&user.UserID, &user.Password, &user.Username, &user.Age, &user.Gender, &user.Email, &user.PhoneNumber, &user.UserType, &user.IsApproved)
 	if err != nil {
-		return User{}, err
+		return models.User{}, err
 	}
 	return user, nil
 }
@@ -53,10 +54,7 @@ func GetAllUserIDs() ([]string, error) {
 	var userIDs []string
 	for rows.Next() {
 		var userID string
-		err = rows.Scan(&userID)
-		if err != nil {
-			return nil, err
-		}
+		_ = rows.Scan(&userID)
 		userIDs = append(userIDs, userID)
 	}
 	return userIDs, nil
@@ -98,58 +96,17 @@ func UpdatePassword(userID, password string) error {
 	return err
 }
 
-func ViewProfile(user User) {
+func ViewProfile(user models.User) {
 	db := utils.GetDB()
 	db.QueryRow("SELECT user_id, username, age, gender,email, phone_number, user_type  FROM users WHERE user_id = ?", user.UserID).
 		Scan(&user.UserID, &user.Username, &user.Age, &user.Gender, &user.Email, &user.PhoneNumber, &user.UserType)
 
-	fmt.Println("\n========== PROFILE ============")
-	fmt.Println("User ID: ", user.UserID)
-	fmt.Println("First Name: ", user.Username)
-	fmt.Println("Age: ", user.Age)
-	fmt.Println("Gender: ", user.Gender)
-	fmt.Println("Email: ", user.Email)
-	fmt.Println("PhoneNumber: ", user.PhoneNumber)
+	fmt.Printf("User ID: %v\nFirst Name: %v\nAge: %v\nGender: %v\nEmail: %v\nPhoneNumber: %v\n",
+		user.UserID, user.Username, user.Age, user.Gender, user.Email, user.PhoneNumber)
 
 	if user.UserType == "doctor" && user.IsApproved == true || user.UserType == "admin" {
 		ViewDoctorSpecificProfile(user.UserID)
 	} else if user.UserType == "patient" || user.UserType == "admin" {
 		ViewPatientDetails(user.UserID)
 	}
-}
-
-// DeleteUser deletes a user from the database based on the provided user ID.
-func DeleteUser(userID string) error {
-	db := utils.GetDB()
-
-	// start a transaction for atomicity
-	tx, err := db.Begin()
-	if err != nil {
-		return fmt.Errorf("failed to begin transaction: %v", err)
-	}
-
-	// Check if the user exists
-	var exists bool
-	err = db.QueryRow("SELECT EXISTS(SELECT 1 FROM users WHERE user_id = ?)", userID).Scan(&exists)
-	if err != nil {
-		return fmt.Errorf("error checking if user exists: %v", err)
-	}
-
-	if !exists {
-		return fmt.Errorf("user with ID %s does not exist", userID)
-	}
-
-	// Delete the user from the users table
-	_, err = tx.Exec("DELETE FROM users WHERE user_id = ?", userID)
-	if err != nil {
-		tx.Rollback() // Rollback the transaction in case of error
-		return fmt.Errorf("error deleting user: %v", err)
-	}
-
-	// commit the transaction
-	err = tx.Commit()
-	if err != nil {
-		return fmt.Errorf("failed to commit transaction: %v", err)
-	}
-	return nil
 }

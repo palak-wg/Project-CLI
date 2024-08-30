@@ -1,8 +1,9 @@
-package tests
+package services
 
 import (
 	"bytes"
-	"doctor-patient-cli/models"
+	"doctor-patient-cli/services"
+	"doctor-patient-cli/tests/mockDB"
 	"doctor-patient-cli/utils"
 	"fmt"
 	"io"
@@ -14,20 +15,20 @@ import (
 )
 
 func TestGetPatientByID(t *testing.T) {
-	MockInitDB(t)
+	mockDB.MockInitDB(t)
 	defer utils.CloseDB()
 
 	t.Run("GetPatientByID Success", func(t *testing.T) {
 		userID := "patient1"
 
 		// Mock the patient query result
-		mock.ExpectQuery("SELECT user_id, medical_history FROM patients WHERE user_id = ?").
+		mockDB.Mock.ExpectQuery("SELECT user_id, medical_history FROM patients WHERE user_id = ?").
 			WithArgs(userID).
 			WillReturnRows(sqlmock.NewRows([]string{"user_id", "medical_history"}).
 				AddRow(userID, "No History"))
 
 		// Call the function
-		patient, err := models.GetPatientByID(userID)
+		patient, err := services.GetPatientByID(userID)
 
 		// Check the results
 		assert.NoError(t, err)
@@ -35,7 +36,7 @@ func TestGetPatientByID(t *testing.T) {
 		assert.Equal(t, "No History", patient.MedicalHistory)
 
 		// Ensure all expectations are met
-		if err := mock.ExpectationsWereMet(); err != nil {
+		if err := mockDB.Mock.ExpectationsWereMet(); err != nil {
 			t.Errorf("there were unfulfilled expectations: %v", err)
 		}
 	})
@@ -44,39 +45,39 @@ func TestGetPatientByID(t *testing.T) {
 		userID := "patient2"
 
 		// Mock the patient query result with an error
-		mock.ExpectQuery("SELECT user_id, medical_history FROM patients WHERE user_id = ?").
+		mockDB.Mock.ExpectQuery("SELECT user_id, medical_history FROM patients WHERE user_id = ?").
 			WithArgs(userID).
 			WillReturnError(fmt.Errorf("query error"))
 
 		// Call the function
-		_, err := models.GetPatientByID(userID)
+		_, err := services.GetPatientByID(userID)
 
 		// Check for the error
 		assert.Error(t, err)
 
 		// Ensure all expectations are met
-		if err := mock.ExpectationsWereMet(); err != nil {
+		if err := mockDB.Mock.ExpectationsWereMet(); err != nil {
 			t.Errorf("there were unfulfilled expectations: %v", err)
 		}
 	})
 }
 
 func TestViewPatientDetails(t *testing.T) {
-	MockInitDB(t)
+	mockDB.MockInitDB(t)
 	defer utils.CloseDB()
 
 	t.Run("ViewPatientDetails Success", func(t *testing.T) {
 		userID := "patient1"
 
 		// Mock the patient query result
-		mock.ExpectQuery("SELECT medical_history FROM patients WHERE user_id = ?").
+		mockDB.Mock.ExpectQuery("SELECT medical_history FROM patients WHERE user_id = ?").
 			WithArgs(userID).
 			WillReturnRows(sqlmock.NewRows([]string{"medical_history"}).
 				AddRow("No History"))
 
 		// Capture the output
 		output := captureOutput(func() {
-			models.ViewPatientDetails(userID)
+			services.ViewPatientDetails(userID)
 		})
 
 		// Trim any additional spaces around the actual output
@@ -87,7 +88,7 @@ func TestViewPatientDetails(t *testing.T) {
 		assert.Equal(t, expectedOutput, output)
 
 		// Ensure all expectations are met
-		if err := mock.ExpectationsWereMet(); err != nil {
+		if err := mockDB.Mock.ExpectationsWereMet(); err != nil {
 			t.Errorf("there were unfulfilled expectations: %v", err)
 		}
 	})

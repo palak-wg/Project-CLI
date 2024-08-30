@@ -1,29 +1,16 @@
-package tests
+package utils
 
 import (
-	"fmt"
 	"testing"
 
-	"doctor-patient-cli/utils" // Adjust the import path according to your project structure
-	"github.com/DATA-DOG/go-sqlmock"
+	"doctor-patient-cli/tests/mockDB"
+	"doctor-patient-cli/utils"
 )
-
-var mock sqlmock.Sqlmock
-
-// MockInitDB sets up the mocked database
-func MockInitDB(t *testing.T) {
-	var err error
-	utils.DB, mock, err = sqlmock.New() // Set the mock database to the DB variable in the utils package
-	if err != nil {
-		t.Fatalf("failed to open sqlmock database: %v", err)
-	}
-	fmt.Println("yes it worked")
-}
 
 func TestInitDB(t *testing.T) {
 	t.Run("Valid Connection", func(t *testing.T) {
-		MockInitDB(t)
-		mock.ExpectPing()
+		mockDB.MockInitDB(t)
+		mockDB.Mock.ExpectPing().WillReturnError(nil)
 
 		err := utils.DB.Ping()
 		if err != nil {
@@ -31,7 +18,7 @@ func TestInitDB(t *testing.T) {
 		}
 
 		// Ensure all expectations are met
-		if err := mock.ExpectationsWereMet(); err != nil {
+		if err := mockDB.Mock.ExpectationsWereMet(); err != nil {
 			t.Errorf("there were unfulfilled expectations: %v", err)
 		}
 	})
@@ -39,7 +26,7 @@ func TestInitDB(t *testing.T) {
 
 func TestGetDB(t *testing.T) {
 	t.Run("GetDB After InitDB", func(t *testing.T) {
-		MockInitDB(t)
+		mockDB.MockInitDB(t)
 
 		if got := utils.GetDB(); got != utils.DB {
 			t.Errorf("GetDB() = %v, want %v", got, utils.DB)
@@ -56,8 +43,8 @@ func TestGetDB(t *testing.T) {
 
 func TestCloseDB(t *testing.T) {
 	t.Run("CloseDB After InitDB", func(t *testing.T) {
-		MockInitDB(t) // Initialize the mock DB
-		mock.ExpectClose()
+		mockDB.MockInitDB(t) // Initialize the mock DB
+		mockDB.Mock.ExpectClose()
 
 		// Check if DB is set to nil
 		if utils.CloseDB(); utils.DB != nil {
@@ -65,7 +52,7 @@ func TestCloseDB(t *testing.T) {
 		}
 
 		// Ensure all expectations are met
-		if err := mock.ExpectationsWereMet(); err != nil {
+		if err := mockDB.Mock.ExpectationsWereMet(); err != nil {
 			t.Errorf("there were unfulfilled expectations: %v", err)
 		}
 	})

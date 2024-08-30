@@ -1,6 +1,7 @@
-package models
+package services
 
 import (
+	"doctor-patient-cli/models"
 	"doctor-patient-cli/utils"
 	"fmt"
 	"time"
@@ -26,54 +27,60 @@ func SendMessageToDoctor(patientID, doctorID, message string) error {
 	return nil
 }
 
-func GetUnreadMessagesByUserID(patientID, doctorID string) ([]Message, error) {
+func GetUnreadMessagesByUserID(patientID, doctorID string) ([]models.Message, error) {
 	db := utils.GetDB()
-	rows, err := db.Query("SELECT message, timestamp FROM messages WHERE receiver_id = ? AND sender_id=? AND status = 'pending'",
-		doctorID, patientID)
+	rows, err := db.Query("SELECT message, timestamp FROM messages WHERE receiver_id = ? AND sender_id=? AND status = 'pending'", doctorID, patientID)
 	if err != nil {
 		return nil, err
 	}
-
-	// Updating unread messages status to read of specific patient
-	_, _ = db.Exec("UPDATE messages SET status = 'read' WHERE receiver_id = ? AND sender_id=? AND status = 'pending'",
-		doctorID, patientID)
-
 	defer rows.Close()
 
-	var messages []Message
+	var messages []models.Message
 	for rows.Next() {
-		var message Message
-		err = rows.Scan(&message.Content, &message.Timestamp)
-		if err != nil {
+		var message models.Message
+		if err = rows.Scan(&message.Content, &message.Timestamp); err != nil {
 			return nil, err
 		}
 		messages = append(messages, message)
 	}
+
+	// Return immediately if no messages found, or if there's a scan error
+	if len(messages) == 0 {
+		return messages, nil
+	}
+
+	// Update unread messages status to read
+	if _, err = db.Exec("UPDATE messages SET status = 'read' WHERE receiver_id = ? AND sender_id=? AND status = 'pending'", doctorID, patientID); err != nil {
+		return nil, err
+	}
+
 	return messages, nil
 }
 
-func GetUnreadMessage(doctorID string) ([]Message, error) {
+func GetUnreadMessage(doctorID string) ([]models.Message, error) {
 	db := utils.GetDB()
-	rows, err := db.Query("SELECT sender_id, message, timestamp FROM messages WHERE (receiver_id = ? AND status = ?)",
+	rows, err := db.Query("SELECT sender_id, message, timestamp FROM messages WHERE receiver_id = ? AND status = ?",
 		doctorID, "pending")
 
 	if err != nil {
 		return nil, err
 	}
-
-	// Updating unread messages status to read
-	_, _ = db.Exec("UPDATE messages SET status = 'read' WHERE receiver_id = ? AND status = 'pending'", doctorID)
-
 	defer rows.Close()
 
-	var messages []Message
+	var messages []models.Message
 	for rows.Next() {
-		var message Message
-		err = rows.Scan(&message.Sender, &message.Content, &message.Timestamp)
-		if err != nil {
-			return nil, err
-		}
+		var message models.Message
+		rows.Scan(&message.Sender, &message.Content, &message.Timestamp)
 		messages = append(messages, message)
+	}
+
+	if len(messages) == 0 {
+		return messages, nil
+	}
+
+	_, err = db.Exec("UPDATE messages SET status = 'read' WHERE receiver_id = ? AND status = 'pending'", doctorID)
+	if err != nil {
+		return nil, err
 	}
 
 	return messages, nil

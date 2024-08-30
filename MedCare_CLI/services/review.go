@@ -1,6 +1,7 @@
-package models
+package services
 
 import (
+	"doctor-patient-cli/models"
 	"doctor-patient-cli/utils"
 	"fmt"
 )
@@ -11,7 +12,7 @@ func AddReview(patientID, doctorID, content string, rating int) error {
 	return err
 }
 
-func GetAllReviews() ([]Review, error) {
+func GetAllReviews() ([]models.Review, error) {
 	db := utils.GetDB()
 	fmt.Println("All reviews:")
 	rows, err := db.Query("SELECT patient_id, doctor_id, content, rating FROM reviews")
@@ -20,13 +21,10 @@ func GetAllReviews() ([]Review, error) {
 	}
 	defer rows.Close()
 
-	var reviews []Review
+	var reviews []models.Review
 	for rows.Next() {
-		var review Review
-		err = rows.Scan(&review.PatientID, &review.DoctorID, &review.Content, &review.Rating)
-		if err != nil {
-			return nil, err
-		}
+		var review models.Review
+		_ = rows.Scan(&review.PatientID, &review.DoctorID, &review.Content, &review.Rating)
 		reviews = append(reviews, review)
 	}
 	return reviews, nil

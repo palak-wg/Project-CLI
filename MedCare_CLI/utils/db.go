@@ -2,7 +2,6 @@ package utils
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 
 	"github.com/fatih/color"
@@ -33,18 +32,10 @@ func GetDB() *sql.DB {
 	return DB
 }
 
-// CloseDB closes the database connection if it is open
-//func CloseDB() {
-//	if DB != nil {
-//		DB.Close()
-//	}
-//}
-
 func CloseDB() {
 	if DB != nil {
 		err := DB.Close()
 		if err != nil {
-			fmt.Println("Failed to close database")
 			log.Printf("Error closing DB: %v", err)
 		}
 		DB = nil // Set DB to nil after closing

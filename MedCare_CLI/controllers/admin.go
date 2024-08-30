@@ -1,23 +1,23 @@
 package controllers
 
 import (
-	"doctor-patient-cli/models"
+	"doctor-patient-cli/services"
 	"fmt"
+	"github.com/fatih/color"
 )
 
 func AdminMenu() {
 	for {
-		fmt.Println("\n===========================================")
-		fmt.Println("\t\tAdmin Functionality")
-		fmt.Println("===========================================")
-		fmt.Println("1. Check Notifications")
-		fmt.Println("2. Approve Doctor Signup")
-		fmt.Println("3. Get specific user profile")
-		fmt.Println("4. Get All User IDs")
-		fmt.Println("5. View All Reviews")
-		fmt.Println("6. View All Notifications")
-		fmt.Println("7. Delete User")
-		fmt.Println("8. Logout")
+		color.Cyan("\n===========================================")
+		color.Cyan("\tAdmin Functionality")
+		color.Cyan("===========================================")
+		color.Magenta("1. Check Notifications")
+		color.Magenta("2. Approve Doctor Signup")
+		color.Magenta("3. Get Specific User Profile")
+		color.Magenta("4. Get All User IDs")
+		color.Magenta("5. View All Reviews")
+		color.Magenta("6. View All Notifications")
+		color.Magenta("7. Logout")
 		fmt.Print("Enter your choice: ")
 
 		var choice int
@@ -25,9 +25,10 @@ func AdminMenu() {
 
 		switch choice {
 		case 1:
-			notifications, err := models.GetNotificationsByUserID("admin")
+			color.Blue("📬 Fetching notifications...")
+			notifications, err := services.GetNotificationsByUserID("admin")
 			if err != nil {
-				fmt.Println("Error fetching notifications:", err)
+				color.Red("🚨 Error fetching notifications: %v", err)
 				continue
 			}
 			for _, notification := range notifications {
@@ -35,35 +36,45 @@ func AdminMenu() {
 			}
 
 		case 2:
-			models.PendingDoctorSignupRequest()
+			color.Blue("🔍 Checking pending doctor signups...")
+			services.PendingDoctorSignupRequest()
 			fmt.Print("Enter Doctor UserID to approve: ")
 			var userID string
 			fmt.Scanln(&userID)
-			err := models.ApproveDoctorSignup(userID)
+			err := services.ApproveDoctorSignup(userID)
 			if err != nil {
-				fmt.Println("Error approving doctor signup:", err)
-			} else {
-				fmt.Println("Doctor signup approved and notification sent.")
+				color.Red("🚨 Error approving doctor signup: %v", err)
+				continue
 			}
+			color.Green("Doctor signup approved and notification sent.")
 
 		case 3:
-			user := models.User{}
+			color.Blue("🔍 Fetching user profile...")
+			var UserID string
 			fmt.Print("Enter userID: ")
-			fmt.Scanln(&user.UserID)
-			models.ViewProfile(user)
+			fmt.Scanln(&UserID)
+			user, err := services.GetUserByID(UserID)
+			if err != nil {
+				color.Red("🚨 No such user exists")
+				continue
+			}
+			color.Cyan("\n================== PROFILE ==================")
+			services.ViewProfile(user)
 
 		case 4:
-			userIDs, err := models.GetAllUserIDs()
+			color.Blue("📋 Fetching all user IDs...")
+			userIDs, err := services.GetAllUserIDs()
 			if err != nil {
-				fmt.Println("Error fetching user IDs:", err)
+				color.Red("🚨 Error fetching user IDs: %v", err)
 				continue
 			}
 			fmt.Println("User IDs:", userIDs)
 
 		case 5:
-			reviews, err := models.GetAllReviews()
+			color.Blue("📜 Fetching all reviews...")
+			reviews, err := services.GetAllReviews()
 			if err != nil {
-				fmt.Println("Error fetching reviews:", err)
+				color.Red("🚨 Error fetching reviews: %v", err)
 				continue
 			}
 			for _, review := range reviews {
@@ -72,9 +83,10 @@ func AdminMenu() {
 			}
 
 		case 6:
-			notifications, err := models.GetAllNotifications()
+			color.Blue("📬 Fetching all notifications...")
+			notifications, err := services.GetAllNotifications()
 			if err != nil {
-				fmt.Println("Error fetching notifications:", err)
+				color.Red("🚨 Error fetching notifications: %v", err)
 				continue
 			}
 			for _, notification := range notifications {
@@ -82,22 +94,11 @@ func AdminMenu() {
 			}
 
 		case 7:
-			var userID string
-			fmt.Print("Enter the User ID to delete: ")
-			fmt.Scanln(&userID)
-
-			err := models.DeleteUser(userID)
-			if err != nil {
-				fmt.Printf("Failed to delete user: %v\n", err)
-			} else {
-				fmt.Println("User deleted successfully.")
-			}
-
-		case 8:
+			color.Green("👋 Logging out...")
 			return
 
 		default:
-			fmt.Println("Invalid choice. Please try again.")
+			color.Red("🚫 Invalid choice. Please try again.")
 		}
 	}
 }

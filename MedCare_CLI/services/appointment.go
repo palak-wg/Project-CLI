@@ -1,11 +1,12 @@
-package models
+package services
 
 import (
+	"doctor-patient-cli/models"
 	"doctor-patient-cli/utils"
 	"fmt"
 )
 
-func GetAppointmentsByDoctorID(doctorID string) ([]Appointment, error) {
+func GetAppointmentsByDoctorID(doctorID string) ([]models.Appointment, error) {
 	db := utils.GetDB()
 	rows, err := db.Query("SELECT appointment_id,doctor_id, patient_id, timestamp,is_approved FROM appointments WHERE doctor_id = ?", doctorID)
 	if err != nil {
@@ -13,13 +14,10 @@ func GetAppointmentsByDoctorID(doctorID string) ([]Appointment, error) {
 	}
 	defer rows.Close()
 
-	var appointments []Appointment
+	var appointments []models.Appointment
 	for rows.Next() {
-		var appointment Appointment
-		err = rows.Scan(&appointment.AppointmentID, &appointment.DoctorID, &appointment.PatientID, &appointment.DateTime, &appointment.IsApproved)
-		if err != nil {
-			return nil, err
-		}
+		var appointment models.Appointment
+		rows.Scan(&appointment.AppointmentID, &appointment.DoctorID, &appointment.PatientID, &appointment.DateTime, &appointment.IsApproved)
 		appointments = append(appointments, appointment)
 	}
 	return appointments, nil

@@ -2,36 +2,37 @@ package controllers
 
 import (
 	"doctor-patient-cli/models"
+	"doctor-patient-cli/services"
 	"doctor-patient-cli/utils"
 	"fmt"
 	"github.com/fatih/color"
 )
 
 func DoctorMenu(user models.User) {
-	_, err := models.GetDoctorByID(user.UserID)
+	_, err := services.GetDoctorByID(user.UserID)
 	if err != nil {
-		fmt.Println("Error fetching doctor details:", err)
+		color.Red("🚨 Error fetching doctor details: %v", err)
 		return
 	}
 
 	if !user.IsApproved {
-		fmt.Println("Your account has not been approved by admin yet.")
+		color.Yellow("⚠️ Your account has not been approved by admin yet.")
 		return
 	}
 
 	for {
-		fmt.Println("\n===========================================")
-		fmt.Println("\t\tDoctor Functionality")
-		fmt.Println("===========================================")
-		fmt.Println("1. View Profile")
-		fmt.Println("2. Check Notifications")
-		fmt.Println("3. Respond to Patient Message Request")
-		fmt.Println("4. Suggest Prescription")
-		fmt.Println("5. Approve Appointment")
-		fmt.Println("6. Update Profile")
-		fmt.Println("7. View All Appointments")
-		fmt.Println("8. Check unread messages")
-		fmt.Println("9. Logout")
+		color.Cyan("\n===========================================")
+		color.Cyan("\tDoctor Functionality")
+		color.Cyan("===========================================")
+		color.Magenta("1. View Profile")
+		color.Magenta("2. Check Notifications")
+		color.Magenta("3. Respond to Patient Message Request")
+		color.Magenta("4. Suggest Prescription")
+		color.Magenta("5. Approve Appointment")
+		color.Magenta("6. Update Profile")
+		color.Magenta("7. View All Appointments")
+		color.Magenta("8. Check Unread Messages")
+		color.Magenta("9. Logout")
 		fmt.Print("Enter your choice: ")
 
 		var choice int
@@ -40,76 +41,78 @@ func DoctorMenu(user models.User) {
 		switch choice {
 		case 1:
 			if err != nil {
-				fmt.Println("Error fetching profile:", err)
+				color.Red("🚨 Error fetching profile: %v", err)
 				continue
 			}
-			models.ViewProfile(user)
+			color.Cyan("\n================== PROFILE ==================")
+			services.ViewProfile(user)
 
 		case 2:
-			notifications, err := models.GetNotificationsByUserID(user.UserID)
+			notifications, err := services.GetNotificationsByUserID(user.UserID)
 			if err != nil {
-				fmt.Println("Error fetching notifications:", err)
+				color.Red("🚨 Error fetching notifications: %v", err)
 				continue
 			}
+			color.Cyan("\n============ NOTIFICATIONS ===============")
 			for _, notification := range notifications {
 				fmt.Printf("Notification: %s, Timestamp: %s\n", notification.Content, notification.Timestamp)
 			}
 
 		case 3:
-			fmt.Println("Enter Patient User ID to respond:")
+			color.Cyan("\nResponding to patient request:")
+			color.Magenta("Enter Patient User ID to respond:")
 			var patientID string
 			fmt.Scanln(&patientID)
 
-			fmt.Println("Enter your response:")
+			color.Magenta("Enter your response:")
 			var response string
 			fmt.Scanln(&response)
 
-			err := models.RespondToPatientRequest(user.UserID, patientID, response)
+			err := services.RespondToPatientRequest(user.UserID, patientID, response)
 			if err != nil {
-				fmt.Println("Error responding to patient:", err)
+				color.Red("🚨 Error responding to patient: %v", err)
 			} else {
-				color.Green("Response sent to patient.")
+				color.Green("✅ Response sent to patient.")
 			}
 
 		case 4:
-			fmt.Println("Enter Patient User ID to suggest prescription:")
+			color.Magenta("Enter Patient User ID to suggest prescription:")
 			var patientID string
 			fmt.Scanln(&patientID)
 
-			fmt.Println("Enter prescription details:")
+			color.Magenta("Enter prescription details:")
 			var prescription string
 			fmt.Scanln(&prescription)
 
-			err := models.SuggestPrescription(user.UserID, patientID, prescription)
+			err := services.SuggestPrescription(user.UserID, patientID, prescription)
 			if err != nil {
-				fmt.Println("Error suggesting prescription:", err)
+				color.Red("🚨 Error suggesting prescription: %v", err)
 			} else {
-				fmt.Println("Prescription sent to patient.")
+				color.Green("✅ Prescription sent to patient.")
 			}
 
 		case 5:
-			fmt.Println("Enter Appointment ID to approve:")
+			color.Magenta("Enter Appointment ID to approve:")
 			var appointmentID string
 			fmt.Scanln(&appointmentID)
 
-			err := models.ApproveAppointment(appointmentID)
+			err := services.ApproveAppointment(appointmentID)
 			if err != nil {
-				fmt.Println("Error approving appointment:", err)
+				color.Red("🚨 Error approving appointment: %v", err)
 			} else {
-				fmt.Println("Appointment approved.")
+				color.Green("✅ Appointment approved.")
 			}
 
 		case 6:
-
-			fmt.Println("\nUpdate your profile:")
-			fmt.Println("1. Update First Name")
-			fmt.Println("2. Update Age")
-			fmt.Println("3. Update Gender")
-			fmt.Println("4. Update Email")
-			fmt.Println("5. Update Phone Number")
-			fmt.Println("6. Update Password")
-			fmt.Println("7. Update Experience")
-			fmt.Println("8. Update Specialization")
+			color.Cyan("\nUpdate your profile:")
+			color.Magenta("1. Update First Name")
+			color.Magenta("2. Update Age")
+			color.Magenta("3. Update Gender")
+			color.Magenta("4. Update Email")
+			color.Magenta("5. Update Phone Number")
+			color.Magenta("6. Update Password")
+			color.Magenta("7. Update Experience")
+			color.Magenta("8. Update Specialization")
 			fmt.Print("Enter your choice: ")
 
 			var updateChoice int
@@ -117,109 +120,109 @@ func DoctorMenu(user models.User) {
 
 			switch updateChoice {
 			case 1:
-				fmt.Print("Enter new firstname: ")
+				color.Magenta("Enter new first name: ")
 				var newFirstname string
 				fmt.Scanln(&newFirstname)
-				err := models.UpdateUsername(user.UserID, newFirstname)
+				err := services.UpdateUsername(user.UserID, newFirstname)
 				if err != nil {
-					fmt.Println("Error updating username:", err)
+					color.Red("🚨 Error updating username: %v", err)
 				} else {
-					fmt.Println("Username updated.")
+					color.Green("✅ Username updated.")
 				}
 			case 2:
-				fmt.Print("Enter new age: ")
+				color.Magenta("Enter new age: ")
 				var newAge int
 				fmt.Scanln(&newAge)
-				err := models.UpdateAge(user.UserID, newAge)
+				err := services.UpdateAge(user.UserID, newAge)
 				if err != nil {
-					fmt.Println("Error updating age:", err)
+					color.Red("🚨 Error updating age: %v", err)
 				} else {
-					fmt.Println("Age updated.")
+					color.Green("✅ Age updated.")
 				}
 			case 3:
-				fmt.Print("Enter new gender: ")
+				color.Magenta("Enter new gender: ")
 				var newGender string
 				fmt.Scanln(&newGender)
-				err := models.UpdateGender(user.UserID, newGender)
+				err := services.UpdateGender(user.UserID, newGender)
 				if err != nil {
-					fmt.Println("Error updating gender:", err)
+					color.Red("🚨 Error updating gender: %v", err)
 				} else {
-					fmt.Println("Gender updated.")
+					color.Green("✅ Gender updated.")
 				}
 			case 4:
-				fmt.Print("Enter new email: ")
+				color.Magenta("Enter new email: ")
 				var newEmail string
 				fmt.Scanln(&newEmail)
-				err := models.UpdateEmail(user.UserID, newEmail)
+				err := services.UpdateEmail(user.UserID, newEmail)
 				if err != nil {
-					fmt.Println("Error updating email:", err)
+					color.Red("🚨 Error updating email: %v", err)
 				} else {
-					fmt.Println("Email updated.")
+					color.Green("✅ Email updated.")
 				}
 			case 5:
-				fmt.Print("Enter new phone number: ")
+				color.Magenta("Enter new phone number: ")
 				var newPhoneNumber string
 				fmt.Scanln(&newPhoneNumber)
-				err := models.UpdatePhoneNumber(user.UserID, newPhoneNumber)
+				err := services.UpdatePhoneNumber(user.UserID, newPhoneNumber)
 				if err != nil {
-					fmt.Println("Error updating phone number:", err)
+					color.Red("🚨 Error updating phone number: %v", err)
 				} else {
-					fmt.Println("Phone number updated.")
+					color.Green("✅ Phone number updated.")
 				}
 			case 6:
-				fmt.Print("Enter new password: ")
+				color.Magenta("Enter new password: ")
 				var newPassword string
 				fmt.Scanln(&newPassword)
-				err := models.UpdatePassword(user.UserID, utils.HashPassword(newPassword))
+				err := services.UpdatePassword(user.UserID, utils.HashPassword(newPassword))
 				if err != nil {
-					fmt.Println("Error updating password:", err)
+					color.Red("🚨 Error updating password: %v", err)
 				} else {
-					fmt.Println("Password updated.")
+					color.Green("✅ Password updated.")
 				}
 			case 7:
-				fmt.Println("Enter new experience in years:")
+				color.Magenta("Enter new experience in years:")
 				var experience int
 				fmt.Scanln(&experience)
 
-				err := models.UpdateDoctorExperience(user.UserID, experience)
+				err := services.UpdateDoctorExperience(user.UserID, experience)
 				if err != nil {
-					fmt.Println("Error updating experience:", err)
+					color.Red("🚨 Error updating experience: %v", err)
 				} else {
-					fmt.Println("Experience updated.")
+					color.Green("✅ Experience updated.")
 				}
 
 			case 8:
-				fmt.Println("Enter new specialization:")
+				color.Magenta("Enter new specialization:")
 				var specialization string
 				fmt.Scanln(&specialization)
 
-				err := models.UpdateDoctorSpecialization(user.UserID, specialization)
+				err := services.UpdateDoctorSpecialization(user.UserID, specialization)
 				if err != nil {
-					fmt.Println("Error updating specialization:", err)
+					color.Red("🚨 Error updating specialization: %v", err)
 				} else {
-					fmt.Println("Specialization updated.")
+					color.Green("✅ Specialization updated.")
 				}
 
 			default:
-				fmt.Println("Invalid choice. Please try again.")
+				color.Red("🚨 Invalid choice. Please try again.")
 			}
 
 		case 7:
-			appointments, err := models.GetAppointmentsByDoctorID(user.UserID)
+			appointments, err := services.GetAppointmentsByDoctorID(user.UserID)
 			if err != nil {
-				fmt.Println("Error fetching appointments:", err)
+				color.Red("🚨 Error fetching appointments: %v", err)
 				continue
 			}
-			fmt.Println("\n============ APPOINTMENTS ===============")
+			color.Cyan("\n============ APPOINTMENTS ===============")
 			for _, appointment := range appointments {
-				fmt.Printf("AppointmentID: %s, PatientID: %s, Time: %s, Status: %v\n",
+				fmt.Printf("AppointmentID: %d, PatientID: %s, Time: %s, Status: %v\n",
 					appointment.AppointmentID, appointment.PatientID, appointment.DateTime, appointment.IsApproved)
 			}
 
 		case 8:
-			fmt.Println("\nCheck messages:")
-			fmt.Println("1. All unread messages")
-			fmt.Println("2. Specific patient")
+			color.Cyan("\nCheck messages:")
+			color.Magenta("1. All unread messages")
+			color.Magenta("2. Specific patient")
 			fmt.Print("Enter your choice: ")
 
 			var choice int
@@ -227,32 +230,34 @@ func DoctorMenu(user models.User) {
 
 			switch choice {
 			case 1:
-				messages, err := models.GetUnreadMessage(user.UserID)
+				messages, err := services.GetUnreadMessage(user.UserID)
 				if err != nil {
-					fmt.Println("Error fetching messages:", err)
+					color.Red("🚨 Error fetching messages: %v", err)
 				}
 				for _, message := range messages {
 					fmt.Printf("From: %s, Message: %s, Timestamp: %s\n", message.Sender, message.Content, message.Timestamp)
 				}
 			case 2:
-				fmt.Println("Enter patient ID: ")
+				color.Magenta("Enter patient ID: ")
 				var ID string
 				fmt.Scanln(&ID)
-				messages, err := models.GetUnreadMessagesByUserID(ID, user.UserID)
+				messages, err := services.GetUnreadMessagesByUserID(ID, user.UserID)
 				if err != nil {
-					fmt.Println("Error fetching messages:", err)
+					color.Red("🚨 Error fetching messages: %v", err)
 				}
 				for _, message := range messages {
 					fmt.Printf("Message: %s, Timestamp: %s\n", message.Content, message.Timestamp)
 				}
 			default:
-				color.Red("Invalid Choice. Try again.")
+				color.Red("🚨 Invalid choice. Try again.")
 			}
 
 		case 9:
+			color.Green("✅ Logging out. Goodbye!")
 			return
+
 		default:
-			fmt.Println("Invalid choice. Please try again.")
+			color.Red("🚨 Invalid choice. Please try again.")
 		}
 	}
 }
