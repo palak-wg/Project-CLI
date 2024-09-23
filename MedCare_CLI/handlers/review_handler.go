@@ -75,7 +75,7 @@ func (handler *ReviewHandler) CreateReview(w http.ResponseWriter, r *http.Reques
 
 	// Checking the claims to the info provided
 	bearerToken := r.Header.Get("Authorization")
-	claims, err := tokens.ExtractClaims(bearerToken)
+	claims, err := tokens.GetClaims(bearerToken)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		err = json.NewEncoder(w).Encode(models.APIResponse{
@@ -139,7 +139,9 @@ func (handler *ReviewHandler) GetDoctorSpecificReviews(w http.ResponseWriter, r 
 	w.Header().Set("Content-Type", "application/json")
 
 	// Fetch all reviews
-	reviews, err := handler.service.GetReviewsByDoctorID(mux.Vars(r)["doctor_id"])
+	vars := mux.Vars(r)
+	doctorID := vars["doctor_id"]
+	reviews, err := handler.service.GetReviewsByDoctorID(doctorID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		err = json.NewEncoder(w).Encode(models.APIResponse{

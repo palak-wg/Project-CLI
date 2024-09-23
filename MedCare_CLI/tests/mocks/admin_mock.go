@@ -82,8 +82,8 @@ func (m *MockAdminRepository) GetPendingDoctorRequests() ([]models.Doctor, error
 	return ret0, ret1
 }
 
-// PendingDoctorSignupRequest indicates an expected call of PendingDoctorSignupRequest.
-func (mr *MockAdminRepositoryMockRecorder) PendingDoctorSignupRequest() *gomock.Call {
+// GetPendingDoctorRequests indicates an expected call of PendingDoctorSignupRequest.
+func (mr *MockAdminRepositoryMockRecorder) GetPendingDoctorRequests() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PendingDoctorSignupRequest", reflect.TypeOf((*MockAdminRepository)(nil).GetPendingDoctorRequests))
 }
@@ -92,11 +92,6 @@ func (mr *MockAdminRepositoryMockRecorder) PendingDoctorSignupRequest() *gomock.
 type MockAdminService struct {
 	ctrl     *gomock.Controller
 	recorder *MockAdminServiceMockRecorder
-}
-
-func (m *MockAdminService) GetPendingDoctorRequests() ([]models.Doctor, error) {
-	//TODO implement me
-	panic("implement me")
 }
 
 // MockAdminServiceMockRecorder is the mock recorder for MockAdminService.
@@ -145,17 +140,31 @@ func (mr *MockAdminServiceMockRecorder) GetAllUsers() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllUsers", reflect.TypeOf((*MockAdminService)(nil).GetAllUsers))
 }
 
-// PendingDoctorSignupRequest mocks base method.
-func (m *MockAdminService) PendingDoctorSignupRequest() ([]models.Doctor, error) {
+// GetPendingDoctorRequests mocks base method.
+func (m *MockAdminService) GetPendingDoctorRequests() ([]models.Doctor, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "PendingDoctorSignupRequest")
+	ret := m.ctrl.Call(m, "GetPendingDoctorRequests")
 	ret0, _ := ret[0].([]models.Doctor)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// PendingDoctorSignupRequest indicates an expected call of PendingDoctorSignupRequest.
-func (mr *MockAdminServiceMockRecorder) PendingDoctorSignupRequest() *gomock.Call {
+// GetPendingDoctorRequests indicates an expected call of PendingDoctorSignupRequest.
+func (mr *MockAdminServiceMockRecorder) GetPendingDoctorRequests() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PendingDoctorSignupRequest", reflect.TypeOf((*MockAdminService)(nil).PendingDoctorSignupRequest))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPendingDoctorRequests", reflect.TypeOf((*MockAdminService)(nil).GetPendingDoctorRequests))
+}
+
+// CreateNotificationForUser mocks base method.
+func (m *MockAdminService) CreateNotificationForUser(userID string, content string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateNotificationForUser", userID, content)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateNotificationForUser indicates an expected call of PendingDoctorSignupRequest.
+func (mr *MockAdminServiceMockRecorder) CreateNotificationForUser(userID, content interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNotificationForUser", reflect.TypeOf((*MockAdminService)(nil).CreateNotificationForUser), userID, content)
 }

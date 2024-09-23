@@ -2,8 +2,8 @@ package handlers
 
 import (
 	"doctor-patient-cli/interfaces"
+	"doctor-patient-cli/middlewares"
 	"doctor-patient-cli/models"
-	"doctor-patient-cli/tokens"
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"go.uber.org/zap"
@@ -23,24 +23,8 @@ func (handler *NotificationHandler) GetNotifications(w http.ResponseWriter, r *h
 	defer loggerZap.Sync()
 
 	w.Header().Set("Content-Type", "application/json")
-	bearerToken := r.Header.Get("Authorization")
-	claims, err := tokens.ExtractClaims(bearerToken)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
-			Status: http.StatusInternalServerError,
-			Data:   "Error extracting claims",
-		})
-		loggerZap.Error("Internal Server Error")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
-		return
-	}
-
-	// Get user ID and role from claims
-	tokenID := claims["id"].(string)
-	role := claims["role"].(string)
+	role, _ := r.Context().Value(middlewares.RoleKey).(string)
+	tokenID, _ := r.Context().Value(middlewares.UserIdKey).(string)
 
 	// Get user_id from path variable
 	userID := mux.Vars(r)["user_id"]
@@ -49,7 +33,7 @@ func (handler *NotificationHandler) GetNotifications(w http.ResponseWriter, r *h
 	if role == "doctor" || role == "patient" {
 		if tokenID != userID {
 			w.WriteHeader(http.StatusForbidden)
-			err = json.NewEncoder(w).Encode(models.APIResponse{
+			err := json.NewEncoder(w).Encode(models.APIResponse{
 				Status: http.StatusForbidden,
 				Data:   "Access denied",
 			})
@@ -86,47 +70,3 @@ func (handler *NotificationHandler) GetNotifications(w http.ResponseWriter, r *h
 		loggerZap.Error("Encoding response")
 	}
 }
-
-//func (handler *NotificationHandler) GetNotifications(w http.ResponseWriter, r *http.Request) {
-//	loggerZap, _ := zap.NewProduction()
-//	defer loggerZap.Sync()
-//
-//	w.Header().Set("Content-Type", "application/json")
-//
-//	// Fetch all user profiles
-//	users, err := handler.service.GetAllUsers()
-//	if err != nil {
-//		w.WriteHeader(http.StatusInternalServerError)
-//		err = json.NewEncoder(w).Encode(models.APIResponse{
-//			Status: http.StatusInternalServerError,
-//			Data:   "Error fetching user profiles",
-//		})
-//		loggerZap.Error("Internal Server Error fetching user profiles")
-//		if err != nil {
-//			loggerZap.Error("Encoding response")
-//		}
-//		return
-//	}
-//
-//	var responseUsers []models.APIResponseUser
-//	for _, user := range users {
-//		responseUsers = append(responseUsers, models.APIResponseUser{
-//			UserID:      user.UserID,
-//			Name:        user.Name,
-//			Age:         user.Age,
-//			Gender:      user.Gender,
-//			Email:       user.Email,
-//			PhoneNumber: user.PhoneNumber,
-//		})
-//	}
-//
-//	// Prepare response
-//	w.WriteHeader(http.StatusOK)
-//	err = json.NewEncoder(w).Encode(models.APIResponse{
-//		Status: http.StatusOK,
-//		Data:   responseUsers,
-//	})
-//	if err != nil {
-//		loggerZap.Error("Encoding response")
-//	}
-//}

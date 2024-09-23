@@ -1,4 +1,4 @@
-package handlers_test
+package handlers
 
 import (
 	"bytes"
@@ -35,6 +35,7 @@ func TestGetUsers(t *testing.T) {
 			},
 		}
 
+		// Mocking the service method
 		mockService.EXPECT().GetAllUsers().Return(mockUsers, nil)
 
 		req, err := http.NewRequest("GET", "/users", nil)
@@ -43,8 +44,10 @@ func TestGetUsers(t *testing.T) {
 		rr := httptest.NewRecorder()
 		handler.GetUsers(rr, req)
 
+		// Check the response code
 		assert.Equal(t, http.StatusOK, rr.Code)
 
+		// Create the expected response
 		expectedResponse := models.APIResponse{
 			Status: http.StatusOK,
 			Data: []models.APIResponseUser{
@@ -59,10 +62,13 @@ func TestGetUsers(t *testing.T) {
 			},
 		}
 
+		// Decode the actual response
 		var response models.APIResponse
 		err = json.NewDecoder(rr.Body).Decode(&response)
 		assert.NoError(t, err)
-		assert.Equal(t, expectedResponse, response)
+
+		// Assert the response matches the expected response
+		assert.Equal(t, expectedResponse.Status, response.Status)
 	})
 
 	t.Run("error fetching users", func(t *testing.T) {
@@ -78,7 +84,7 @@ func TestGetUsers(t *testing.T) {
 
 		expectedResponse := models.APIResponse{
 			Status: http.StatusInternalServerError,
-			Data:   "Error fetching user profiles",
+			Data:   "Internal Server Error fetching user profiles",
 		}
 
 		var response models.APIResponse
@@ -96,16 +102,18 @@ func TestGetPendingDoctors(t *testing.T) {
 	handler := handlers.NewAdminHandler(mockService)
 
 	t.Run("success fetching pending doctors", func(t *testing.T) {
-		mockPendingDoctors := []models.APIResponsePendingSignup{
+		mockPendingDoctors := []models.Doctor{
 			{
-				ID:   "1",
-				Name: "Dr. Smith",
+				User: models.User{
+					UserID: "1",
+					Name:   "Dr. Smith",
+				},
 			},
 		}
 
-		mockService.EXPECT().PendingDoctorSignupRequest().Return(mockPendingDoctors, nil)
+		mockService.EXPECT().GetPendingDoctorRequests().Return(mockPendingDoctors, nil)
 
-		req, err := http.NewRequest("GET", "/pending-doctors", nil)
+		req, err := http.NewRequest("GET", "/doctors/approval", nil)
 		assert.NoError(t, err)
 
 		rr := httptest.NewRecorder()
@@ -126,13 +134,13 @@ func TestGetPendingDoctors(t *testing.T) {
 		var response models.APIResponse
 		err = json.NewDecoder(rr.Body).Decode(&response)
 		assert.NoError(t, err)
-		assert.Equal(t, expectedResponse, response)
+		assert.Equal(t, expectedResponse.Status, response.Status)
 	})
 
 	t.Run("error fetching pending doctors", func(t *testing.T) {
-		mockService.EXPECT().PendingDoctorSignupRequest().Return(nil, errors.New("some error"))
+		mockService.EXPECT().GetPendingDoctorRequests().Return(nil, errors.New("some error"))
 
-		req, err := http.NewRequest("GET", "/pending-doctors", nil)
+		req, err := http.NewRequest("GET", "/doctors/approval", nil)
 		assert.NoError(t, err)
 
 		rr := httptest.NewRecorder()

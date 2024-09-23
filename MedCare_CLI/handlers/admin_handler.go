@@ -23,24 +23,20 @@ func (handler *AdminHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 
-	// Fetch all user profiles
 	users, err := handler.service.GetAllUsers()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
+		json.NewEncoder(w).Encode(models.APIResponse{
 			Status: http.StatusInternalServerError,
-			Data:   "Error fetching user profiles",
+			Data:   "Internal Server Error fetching user profiles",
 		})
-		loggerZap.Error("Internal Server Error fetching user profiles")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
+		loggerZap.Error("Internal Server Error fetching user profiles", zap.Error(err))
 		return
 	}
 
-	var responseUsers []models.APIResponseUser
+	var apiUsers []models.APIResponseUser
 	for _, user := range users {
-		responseUsers = append(responseUsers, models.APIResponseUser{
+		apiUsers = append(apiUsers, models.APIResponseUser{
 			UserID:      user.UserID,
 			Name:        user.Name,
 			Age:         user.Age,
@@ -50,15 +46,13 @@ func (handler *AdminHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 
-	// Prepare response
-	w.WriteHeader(http.StatusOK)
-	err = json.NewEncoder(w).Encode(models.APIResponse{
+	response := models.APIResponse{
 		Status: http.StatusOK,
-		Data:   responseUsers,
-	})
-	if err != nil {
-		loggerZap.Error("Encoding response")
+		Data:   apiUsers,
 	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(response)
 }
 
 func (handler *AdminHandler) GetPendingDoctors(w http.ResponseWriter, request *http.Request) {

@@ -2,8 +2,8 @@ package handlers
 
 import (
 	"doctor-patient-cli/interfaces"
+	"doctor-patient-cli/middlewares"
 	"doctor-patient-cli/models"
-	"doctor-patient-cli/tokens"
 	"encoding/json"
 	"fmt"
 	"go.uber.org/zap"
@@ -40,17 +40,7 @@ func (handler *PatientHandler) UpdateProfile(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	bearerToken := r.Header.Get("Authorization")
-	claims, err := tokens.ExtractClaims(bearerToken)
-	if err != nil {
-		w.WriteHeader(http.StatusUnauthorized)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
-			Status: http.StatusUnauthorized,
-			Data:   http.StatusText(http.StatusUnauthorized),
-		})
-		loggerZap.Error("Extracting Claims")
-	}
-	user.UserID = claims["id"].(string)
+	user.UserID, _ = r.Context().Value(middlewares.UserIdKey).(string)
 
 	err = handler.service.UpdatePatientDetails(&user)
 	if err != nil {

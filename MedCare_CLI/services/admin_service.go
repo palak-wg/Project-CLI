@@ -55,10 +55,14 @@ func (service *AdminService) ApproveDoctorSignup(userID string) error {
 
 // GetPendingDoctorRequests retrieves pending doctor signup requests
 func (service *AdminService) GetPendingDoctorRequests() ([]models.Doctor, error) {
-	return service.adminRepo.PendingDoctorSignupRequest()
+	return service.adminRepo.GetPendingDoctorRequests()
 }
 
 // GetAllUsers retrieves all users from the repository
 func (service *AdminService) GetAllUsers() ([]models.User, error) {
 	return service.adminRepo.GetAllUsers()
+}
+
+func (service *AdminService) CreateNotificationForUser(userID string, content string) error {
+	return service.adminRepo.CreateNotificationForUser(userID, content)
 }

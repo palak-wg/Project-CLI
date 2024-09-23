@@ -2,8 +2,8 @@ package handlers
 
 import (
 	"doctor-patient-cli/interfaces"
+	"doctor-patient-cli/middlewares"
 	"doctor-patient-cli/models"
-	"doctor-patient-cli/tokens"
 	"encoding/json"
 	"go.uber.org/zap"
 	"net/http"
@@ -23,18 +23,8 @@ func (handler *MessageHandler) GetMessages(w http.ResponseWriter, r *http.Reques
 
 	w.Header().Set("Content-Type", "application/json")
 
-	bearerToken := r.Header.Get("Authorization")
-	claims, err := tokens.ExtractClaims(bearerToken)
-	if err != nil {
-		w.WriteHeader(http.StatusUnauthorized)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
-			Status: http.StatusUnauthorized,
-			Data:   http.StatusText(http.StatusUnauthorized),
-		})
-		loggerZap.Error("Extracting Claims")
-	}
+	userID, _ := r.Context().Value(middlewares.UserIdKey).(string)
 
-	userID := claims["id"].(string)
 	messages, err := handler.service.GetUnreadMessages(userID)
 	fromId := r.URL.Query().Get("from_id")
 
@@ -81,18 +71,8 @@ func (handler *MessageHandler) AddMessage(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	bearerToken := r.Header.Get("Authorization")
-	claims, err := tokens.ExtractClaims(bearerToken)
-	if err != nil {
-		w.WriteHeader(http.StatusUnauthorized)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
-			Status: http.StatusUnauthorized,
-			Data:   http.StatusText(http.StatusUnauthorized),
-		})
-		loggerZap.Error("Extracting Claims")
-	}
+	userID, _ := r.Context().Value(middlewares.UserIdKey).(string)
 
-	userID := claims["id"].(string)
 	if userID != message.Sender {
 		w.WriteHeader(http.StatusBadRequest)
 		err = json.NewEncoder(w).Encode(models.APIResponse{

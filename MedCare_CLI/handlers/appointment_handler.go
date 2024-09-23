@@ -2,8 +2,8 @@ package handlers
 
 import (
 	"doctor-patient-cli/interfaces"
+	"doctor-patient-cli/middlewares"
 	"doctor-patient-cli/models"
-	"doctor-patient-cli/tokens"
 	"encoding/json"
 	"fmt"
 	"go.uber.org/zap"
@@ -23,36 +23,18 @@ func (handler *AppointmentHandler) GetAppointments(w http.ResponseWriter, r *htt
 	defer loggerZap.Sync()
 
 	w.Header().Set("Content-Type", "application/json")
-	bearerToken := r.Header.Get("Authorization")
-	claims, err := tokens.ExtractClaims(bearerToken)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
-			Status: http.StatusInternalServerError,
-			Data:   "Error extracting claims",
-		})
-		loggerZap.Error("Internal Server Error")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
-		return
-	}
 
-	// Get user ID and role from claims
-	id := claims["id"].(string)
-	role := claims["role"].(string)
+	role, _ := r.Context().Value(middlewares.RoleKey).(string)
+	id, _ := r.Context().Value(middlewares.UserIdKey).(string)
 
 	// If the role is 'patient', appointments shouldn't be shown to him
 	if role == "patient" {
 		w.WriteHeader(http.StatusForbidden)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
+		_ = json.NewEncoder(w).Encode(models.APIResponse{
 			Status: http.StatusForbidden,
 			Data:   "Access denied",
 		})
 		loggerZap.Error("Access denied for user")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
 		return
 	}
 
@@ -114,29 +96,12 @@ func (handler *AppointmentHandler) CreateAppointment(w http.ResponseWriter, r *h
 
 	w.Header().Set("Content-Type", "application/json")
 
-	bearerToken := r.Header.Get("Authorization")
-	claims, err := tokens.ExtractClaims(bearerToken)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
-			Status: http.StatusInternalServerError,
-			Data:   "Error extracting claims",
-		})
-		loggerZap.Error("Internal Server Error")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
-		return
-	}
-
-	// Get user ID and role from claims
-	id := claims["id"].(string)
-	role := claims["role"].(string)
+	role, _ := r.Context().Value(middlewares.RoleKey).(string)
+	id, _ := r.Context().Value(middlewares.UserIdKey).(string)
 
 	var appointment models.Appointment
-	err = json.NewDecoder(r.Body).Decode(&appointment)
+	err := json.NewDecoder(r.Body).Decode(&appointment)
 	if err != nil {
-
 		w.WriteHeader(http.StatusInternalServerError)
 		err := json.NewEncoder(w).Encode(models.APIResponse{
 			Status: http.StatusInternalServerError,
@@ -146,7 +111,6 @@ func (handler *AppointmentHandler) CreateAppointment(w http.ResponseWriter, r *h
 		if err != nil {
 			loggerZap.Error("Encoding response")
 		}
-
 		return
 	}
 
@@ -173,6 +137,17 @@ func (handler *AppointmentHandler) CreateAppointment(w http.ResponseWriter, r *h
 		if err != nil {
 			loggerZap.Error("Encoding response")
 		}
+		return
+	}
+
+	// Add success response here
+	w.WriteHeader(http.StatusOK)
+	err = json.NewEncoder(w).Encode(models.APIResponse{
+		Status: http.StatusOK,
+		Data:   "Appointment created successfully",
+	})
+	if err != nil {
+		loggerZap.Error("Encoding success response")
 	}
 }
 
@@ -182,23 +157,10 @@ func (handler *AppointmentHandler) UpdateAppointment(w http.ResponseWriter, r *h
 
 	w.Header().Set("Content-Type", "application/json")
 
-	bearerToken := r.Header.Get("Authorization")
-	claims, err := tokens.ExtractClaims(bearerToken)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
-			Status: http.StatusInternalServerError,
-			Data:   "Error extracting claims",
-		})
-		loggerZap.Error("Internal Server Error")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
-		return
-	}
+	role, _ := r.Context().Value(middlewares.RoleKey).(string)
 
 	var appointment models.Appointment
-	err = json.NewDecoder(r.Body).Decode(&appointment)
+	err := json.NewDecoder(r.Body).Decode(&appointment)
 	if err != nil {
 
 		w.WriteHeader(http.StatusBadRequest)
@@ -212,9 +174,6 @@ func (handler *AppointmentHandler) UpdateAppointment(w http.ResponseWriter, r *h
 
 		return
 	}
-
-	// Get user ID and role from claims
-	role := claims["role"].(string)
 
 	if role == "patient" {
 		w.WriteHeader(http.StatusBadRequest)
