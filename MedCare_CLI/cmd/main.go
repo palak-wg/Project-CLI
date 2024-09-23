@@ -52,13 +52,11 @@ func main() {
 		apiRouter.HandleFunc("/reviews/{doctor_id}", reviewHandler.GetDoctorSpecificReviews).Methods("GET")
 		apiRouter.HandleFunc("/reviews", reviewHandler.CreateReview).Methods("POST")
 		apiRouter.HandleFunc("/appointments", appointmentHandler.GetAppointments).Methods("GET")
-		/**/ apiRouter.HandleFunc("/appointments?isApproved=", appointmentHandler.GetPendingAppointments).Methods("GET")
 		apiRouter.HandleFunc("/appointments", appointmentHandler.CreateAppointment).Methods("POST")
 		apiRouter.HandleFunc("/appointments", appointmentHandler.UpdateAppointment).Methods("PATCH")
 		apiRouter.HandleFunc("/users/{user_id}", patientHandler.UpdateProfile).Methods("PUT")
 		apiRouter.HandleFunc("/messages", messageHandler.GetMessages).Methods("GET")
 		apiRouter.HandleFunc("/messages", messageHandler.AddMessage).Methods("POST")
-		/**/ apiRouter.HandleFunc("/messages?from=", messageHandler.GetMessages).Methods("GET")
 
 		// admin middleware
 		adminRouter := apiRouter.PathPrefix("/admin").Subrouter()

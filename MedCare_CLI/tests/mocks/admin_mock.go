@@ -85,7 +85,7 @@ func (m *MockAdminRepository) GetPendingDoctorRequests() ([]models.Doctor, error
 // PendingDoctorSignupRequest indicates an expected call of PendingDoctorSignupRequest.
 func (mr *MockAdminRepositoryMockRecorder) PendingDoctorSignupRequest() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PendingDoctorSignupRequest", reflect.TypeOf((*MockAdminRepository)(nil).PendingDoctorSignupRequest))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PendingDoctorSignupRequest", reflect.TypeOf((*MockAdminRepository)(nil).GetPendingDoctorRequests))
 }
 
 // MockAdminService is a mock of AdminService interface.

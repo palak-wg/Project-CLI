@@ -77,89 +77,13 @@ func (handler *AppointmentHandler) GetAppointments(w http.ResponseWriter, r *htt
 
 	// Fetch the user profile
 	appointments, err := handler.service.GetAppointmentsByDoctorID(id)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
-			Status: http.StatusInternalServerError,
-			Data:   "Error fetching appointments",
-		})
-		loggerZap.Error("Error fetching appointments")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
-		return
+
+	approve := r.URL.Query().Get("approve")
+
+	if approve != "" {
+		appointments, err = handler.service.GetPendingAppointmentsByDoctorID(id)
 	}
 
-	// Prepare response
-	w.WriteHeader(http.StatusOK)
-	err = json.NewEncoder(w).Encode(models.APIResponse{
-		Status: http.StatusOK,
-		Data:   appointments,
-	})
-	if err != nil {
-		loggerZap.Error("Encoding response")
-	}
-}
-
-func (handler *AppointmentHandler) GetPendingAppointments(w http.ResponseWriter, r *http.Request) {
-	loggerZap, _ := zap.NewProduction()
-	defer loggerZap.Sync()
-
-	w.Header().Set("Content-Type", "application/json")
-	bearerToken := r.Header.Get("Authorization")
-	claims, err := tokens.ExtractClaims(bearerToken)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
-			Status: http.StatusInternalServerError,
-			Data:   "Error extracting claims",
-		})
-		loggerZap.Error("Internal Server Error")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
-		return
-	}
-
-	// Get user ID and role from claims
-	ID := claims["id"].(string)
-	role := claims["role"].(string)
-
-	// If the role is 'patient', appointments shouldn't be shown to him
-	if role == "patient" {
-		w.WriteHeader(http.StatusForbidden)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
-			Status: http.StatusForbidden,
-			Data:   "Access denied",
-		})
-		loggerZap.Error("Access denied for user")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
-		return
-	}
-
-	if role == "admin" {
-		var user models.User
-		err := json.NewDecoder(r.Body).Decode(&user)
-		if err != nil {
-
-			w.WriteHeader(http.StatusBadRequest)
-			err := json.NewEncoder(w).Encode(models.APIResponse{
-				Status: http.StatusBadRequest,
-				Data:   http.StatusText(http.StatusBadRequest),
-			})
-			if err != nil {
-				loggerZap.Error("Encoding response")
-			}
-
-			return
-		}
-		ID = user.UserID
-	}
-
-	// Fetch the user profile
-	appointments, err := handler.service.GetPendingAppointmentsByDoctorID(ID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		err = json.NewEncoder(w).Encode(models.APIResponse{
