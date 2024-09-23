@@ -73,8 +73,8 @@ func (mr *MockAdminRepositoryMockRecorder) GetAllUsers() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllUsers", reflect.TypeOf((*MockAdminRepository)(nil).GetAllUsers))
 }
 
-// PendingDoctorSignupRequest mocks base method.
-func (m *MockAdminRepository) PendingDoctorSignupRequest() ([]models.Doctor, error) {
+// GetPendingDoctorRequests mocks base method.
+func (m *MockAdminRepository) GetPendingDoctorRequests() ([]models.Doctor, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "PendingDoctorSignupRequest")
 	ret0, _ := ret[0].([]models.Doctor)
@@ -94,63 +94,68 @@ type MockAdminService struct {
 	recorder *MockAdminServiceMockRecorder
 }
 
+func (m *MockAdminService) GetPendingDoctorRequests() ([]models.Doctor, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
 // MockAdminServiceMockRecorder is the mock recorder for MockAdminService.
 type MockAdminServiceMockRecorder struct {
 	mock *MockAdminService
 }
 
-//// NewMockAdminService creates a new mock instance.
-//func NewMockAdminService(ctrl *gomock.Controller) *MockAdminService {
-//	mock := &MockAdminService{ctrl: ctrl}
-//	mock.recorder = &MockAdminServiceMockRecorder{mock}
-//	return mock
-//}
-//
-//// EXPECT returns an object that allows the caller to indicate expected use.
-//func (m *MockAdminService) EXPECT() *MockAdminServiceMockRecorder {
-//	return m.recorder
-//}
-//
-//// ApproveDoctorSignup mocks base method.
-//func (m *MockAdminService) ApproveDoctorSignup(userID string) error {
-//	m.ctrl.T.Helper()
-//	ret := m.ctrl.Call(m, "ApproveDoctorSignup", userID)
-//	ret0, _ := ret[0].(error)
-//	return ret0
-//}
-//
-//// ApproveDoctorSignup indicates an expected call of ApproveDoctorSignup.
-//func (mr *MockAdminServiceMockRecorder) ApproveDoctorSignup(userID interface{}) *gomock.Call {
-//	mr.mock.ctrl.T.Helper()
-//	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ApproveDoctorSignup", reflect.TypeOf((*MockAdminService)(nil).ApproveDoctorSignup), userID)
-//}
-//
-//// GetAllUsers mocks base method.
-//func (m *MockAdminService) GetAllUsers() ([]models.User, error) {
-//	m.ctrl.T.Helper()
-//	ret := m.ctrl.Call(m, "GetAllUsers")
-//	ret0, _ := ret[0].([]models.User)
-//	ret1, _ := ret[1].(error)
-//	return ret0, ret1
-//}
-//
-//// GetAllUsers indicates an expected call of GetAllUsers.
-//func (mr *MockAdminServiceMockRecorder) GetAllUsers() *gomock.Call {
-//	mr.mock.ctrl.T.Helper()
-//	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllUsers", reflect.TypeOf((*MockAdminService)(nil).GetAllUsers))
-//}
-//
-//// PendingDoctorSignupRequest mocks base method.
-//func (m *MockAdminService) PendingDoctorSignupRequest() ([]models.Doctor, error) {
-//	m.ctrl.T.Helper()
-//	ret := m.ctrl.Call(m, "PendingDoctorSignupRequest")
-//	ret0, _ := ret[0].([]models.Doctor)
-//	ret1, _ := ret[1].(error)
-//	return ret0, ret1
-//}
-//
-//// PendingDoctorSignupRequest indicates an expected call of PendingDoctorSignupRequest.
-//func (mr *MockAdminServiceMockRecorder) PendingDoctorSignupRequest() *gomock.Call {
-//	mr.mock.ctrl.T.Helper()
-//	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PendingDoctorSignupRequest", reflect.TypeOf((*MockAdminService)(nil).PendingDoctorSignupRequest))
-//}
+// NewMockAdminService creates a new mock instance.
+func NewMockAdminService(ctrl *gomock.Controller) *MockAdminService {
+	mock := &MockAdminService{ctrl: ctrl}
+	mock.recorder = &MockAdminServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockAdminService) EXPECT() *MockAdminServiceMockRecorder {
+	return m.recorder
+}
+
+// ApproveDoctorSignup mocks base method.
+func (m *MockAdminService) ApproveDoctorSignup(userID string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ApproveDoctorSignup", userID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// ApproveDoctorSignup indicates an expected call of ApproveDoctorSignup.
+func (mr *MockAdminServiceMockRecorder) ApproveDoctorSignup(userID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ApproveDoctorSignup", reflect.TypeOf((*MockAdminService)(nil).ApproveDoctorSignup), userID)
+}
+
+// GetAllUsers mocks base method.
+func (m *MockAdminService) GetAllUsers() ([]models.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetAllUsers")
+	ret0, _ := ret[0].([]models.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetAllUsers indicates an expected call of GetAllUsers.
+func (mr *MockAdminServiceMockRecorder) GetAllUsers() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllUsers", reflect.TypeOf((*MockAdminService)(nil).GetAllUsers))
+}
+
+// PendingDoctorSignupRequest mocks base method.
+func (m *MockAdminService) PendingDoctorSignupRequest() ([]models.Doctor, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "PendingDoctorSignupRequest")
+	ret0, _ := ret[0].([]models.Doctor)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// PendingDoctorSignupRequest indicates an expected call of PendingDoctorSignupRequest.
+func (mr *MockAdminServiceMockRecorder) PendingDoctorSignupRequest() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PendingDoctorSignupRequest", reflect.TypeOf((*MockAdminService)(nil).PendingDoctorSignupRequest))
+}

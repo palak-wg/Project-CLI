@@ -38,8 +38,8 @@ func (repo *PatientRepositoryImpl) GetPatientByID(patientID string) (*models.Pat
 
 // UpdatePatientDetails updates the patient's profile in the database
 func (repo *PatientRepositoryImpl) UpdatePatientDetails(patient *models.Patient) error {
-	query := `UPDATE patients SET name = ?, age = ?, gender = ?, email = ?, phone_number = ?, medical_history = ? WHERE user_id = ?`
-	_, err := repo.db.Exec(query, patient.Name, patient.Age, patient.Gender, patient.Email, patient.PhoneNumber, patient.MedicalHistory, patient.UserID)
+	query := `UPDATE users SET name = ?, age = ?, gender = ?, email = ?, phone_number = ? WHERE user_id = ?`
+	_, err := repo.db.Exec(query, patient.Name, patient.Age, patient.Gender, patient.Email, patient.PhoneNumber, patient.UserID)
 
 	if err != nil {
 		log.Printf("Error updating patient details: %v", err)

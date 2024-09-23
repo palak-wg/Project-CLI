@@ -46,7 +46,7 @@ func (repo *AdminRepositoryImpl) CreateNotificationForUser(userID string, conten
 	return nil
 }
 
-func (repo *AdminRepositoryImpl) PendingDoctorSignupRequest() ([]models.Doctor, error) {
+func (repo *AdminRepositoryImpl) GetPendingDoctorRequests() ([]models.Doctor, error) {
 	query := "SELECT user_id, username FROM users WHERE user_type = `doctor` AND is_approved = 0"
 	rows, err := repo.db.Query(query)
 	if err != nil {
