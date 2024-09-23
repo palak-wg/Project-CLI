@@ -47,10 +47,10 @@ func (repo *ReviewRepositoryImpl) GetAllReviews() ([]models.Review, error) {
 }
 
 // GetReviewsByDoctorID retrieves reviews for a specific doctor from the database
-func (repo *ReviewRepositoryImpl) GetReviewsByDoctorID(doctorID int) ([]models.Review, error) {
+func (repo *ReviewRepositoryImpl) GetReviewsByDoctorID(doctorID string) ([]models.Review, error) {
 	rows, err := repo.db.Query("SELECT patient_id, doctor_id, content, rating, timestamp FROM reviews WHERE doctor_id = ?", doctorID)
 	if err != nil {
-		log.Printf("Repository: Error fetching reviews for doctorID %d: %v", doctorID, err)
+		log.Printf("Repository: Error fetching reviews for doctorID %s: %v", doctorID, err)
 		return nil, err
 	}
 	defer rows.Close()

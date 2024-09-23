@@ -161,8 +161,8 @@ func TestUpdatePatientDetails_Failure(t *testing.T) {
 	}
 
 	// Simulate an error during the UPDATE query
-	mock.ExpectExec("UPDATE patients SET name = \\?, age = \\?, gender = \\?, email = \\?, phone_number = \\?, medical_history = \\? WHERE user_id = \\?").
-		WithArgs(updatedPatient.Name, updatedPatient.Age, updatedPatient.Gender, updatedPatient.Email, updatedPatient.PhoneNumber, updatedPatient.MedicalHistory, updatedPatient.UserID).
+	mock.ExpectExec("UPDATE users SET name = \\?, age = \\?, gender = \\?, email = \\?, phone_number = \\? WHERE user_id = \\?").
+		WithArgs(updatedPatient.Name, updatedPatient.Age, updatedPatient.Gender, updatedPatient.Email, updatedPatient.PhoneNumber, updatedPatient.UserID).
 		WillReturnError(errors.New("update failed"))
 
 	// Call the UpdatePatientDetails function

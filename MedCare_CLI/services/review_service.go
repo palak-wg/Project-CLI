@@ -36,10 +36,10 @@ func (service *ReviewService) GetAllReviews() ([]models.Review, error) {
 }
 
 // GetReviewsByDoctorID retrieves reviews for a specific doctor
-func (service *ReviewService) GetReviewsByDoctorID(doctorID int) ([]models.Review, error) {
+func (service *ReviewService) GetReviewsByDoctorID(doctorID string) ([]models.Review, error) {
 	reviews, err := service.repo.GetReviewsByDoctorID(doctorID)
 	if err != nil {
-		log.Printf("Service: Error retrieving reviews for doctorID %d: %v", doctorID, err)
+		log.Printf("Service: Error retrieving reviews for doctorID %s: %v", doctorID, err)
 		return nil, err
 	}
 	return reviews, nil

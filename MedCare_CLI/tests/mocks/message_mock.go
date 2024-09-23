@@ -103,72 +103,72 @@ type MockMessageServiceMockRecorder struct {
 	mock *MockMessageService
 }
 
-//// NewMockMessageService creates a new mock instance.
-//func NewMockMessageService(ctrl *gomock.Controller) *MockMessageService {
-//	mock := &MockMessageService{ctrl: ctrl}
-//	mock.recorder = &MockMessageServiceMockRecorder{mock}
-//	return mock
-//}
-//
-//// EXPECT returns an object that allows the caller to indicate expected use.
-//func (m *MockMessageService) EXPECT() *MockMessageServiceMockRecorder {
-//	return m.recorder
-//}
-//
-//// GetUnreadMessages mocks base method.
-//func (m *MockMessageService) GetUnreadMessages(userID string) ([]models.Message, error) {
-//	m.ctrl.T.Helper()
-//	ret := m.ctrl.Call(m, "GetUnreadMessages", userID)
-//	ret0, _ := ret[0].([]models.Message)
-//	ret1, _ := ret[1].(error)
-//	return ret0, ret1
-//}
-//
-//// GetUnreadMessages indicates an expected call of GetUnreadMessages.
-//func (mr *MockMessageServiceMockRecorder) GetUnreadMessages(userID interface{}) *gomock.Call {
-//	mr.mock.ctrl.T.Helper()
-//	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUnreadMessages", reflect.TypeOf((*MockMessageService)(nil).GetUnreadMessages), userID)
-//}
-//
-//// GetUnreadMessagesById mocks base method.
-//func (m *MockMessageService) GetUnreadMessagesById(patientID, doctorID string) ([]models.Message, error) {
-//	m.ctrl.T.Helper()
-//	ret := m.ctrl.Call(m, "GetUnreadMessagesById", patientID, doctorID)
-//	ret0, _ := ret[0].([]models.Message)
-//	ret1, _ := ret[1].(error)
-//	return ret0, ret1
-//}
-//
-//// GetUnreadMessagesById indicates an expected call of GetUnreadMessagesById.
-//func (mr *MockMessageServiceMockRecorder) GetUnreadMessagesById(patientID, doctorID interface{}) *gomock.Call {
-//	mr.mock.ctrl.T.Helper()
-//	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUnreadMessagesById", reflect.TypeOf((*MockMessageService)(nil).GetUnreadMessagesById), patientID, doctorID)
-//}
-//
-//// RespondToPatient mocks base method.
-//func (m *MockMessageService) RespondToPatient(doctorID, patientID, response string) error {
-//	m.ctrl.T.Helper()
-//	ret := m.ctrl.Call(m, "RespondToPatient", doctorID, patientID, response)
-//	ret0, _ := ret[0].(error)
-//	return ret0
-//}
-//
-//// RespondToPatient indicates an expected call of RespondToPatient.
-//func (mr *MockMessageServiceMockRecorder) RespondToPatient(doctorID, patientID, response interface{}) *gomock.Call {
-//	mr.mock.ctrl.T.Helper()
-//	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RespondToPatient", reflect.TypeOf((*MockMessageService)(nil).RespondToPatient), doctorID, patientID, response)
-//}
-//
-//// SendMessage mocks base method.
-//func (m *MockMessageService) SendMessage(fromID, toID, message string) error {
-//	m.ctrl.T.Helper()
-//	ret := m.ctrl.Call(m, "SendMessage", fromID, toID, message)
-//	ret0, _ := ret[0].(error)
-//	return ret0
-//}
-//
-//// SendMessage indicates an expected call of SendMessage.
-//func (mr *MockMessageServiceMockRecorder) SendMessage(fromID, toID, message interface{}) *gomock.Call {
-//	mr.mock.ctrl.T.Helper()
-//	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendMessage", reflect.TypeOf((*MockMessageService)(nil).SendMessage), fromID, toID, message)
-//}
+// NewMockMessageService creates a new mock instance.
+func NewMockMessageService(ctrl *gomock.Controller) *MockMessageService {
+	mock := &MockMessageService{ctrl: ctrl}
+	mock.recorder = &MockMessageServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockMessageService) EXPECT() *MockMessageServiceMockRecorder {
+	return m.recorder
+}
+
+// GetUnreadMessages mocks base method.
+func (m *MockMessageService) GetUnreadMessages(userID string) ([]models.Message, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUnreadMessages", userID)
+	ret0, _ := ret[0].([]models.Message)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUnreadMessages indicates an expected call of GetUnreadMessages.
+func (mr *MockMessageServiceMockRecorder) GetUnreadMessages(userID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUnreadMessages", reflect.TypeOf((*MockMessageService)(nil).GetUnreadMessages), userID)
+}
+
+// GetUnreadMessagesById mocks base method.
+func (m *MockMessageService) GetUnreadMessagesById(patientID, doctorID string) ([]models.Message, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUnreadMessagesById", patientID, doctorID)
+	ret0, _ := ret[0].([]models.Message)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUnreadMessagesById indicates an expected call of GetUnreadMessagesById.
+func (mr *MockMessageServiceMockRecorder) GetUnreadMessagesById(patientID, doctorID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUnreadMessagesById", reflect.TypeOf((*MockMessageService)(nil).GetUnreadMessagesById), patientID, doctorID)
+}
+
+// RespondToPatient mocks base method.
+func (m *MockMessageService) RespondToPatient(doctorID, patientID, response string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RespondToPatient", doctorID, patientID, response)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// RespondToPatient indicates an expected call of RespondToPatient.
+func (mr *MockMessageServiceMockRecorder) RespondToPatient(doctorID, patientID, response interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RespondToPatient", reflect.TypeOf((*MockMessageService)(nil).RespondToPatient), doctorID, patientID, response)
+}
+
+// SendMessage mocks base method.
+func (m *MockMessageService) SendMessage(fromID, toID, message string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SendMessage", fromID, toID, message)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SendMessage indicates an expected call of SendMessage.
+func (mr *MockMessageServiceMockRecorder) SendMessage(fromID, toID, message interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendMessage", reflect.TypeOf((*MockMessageService)(nil).SendMessage), fromID, toID, message)
+}

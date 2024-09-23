@@ -5,8 +5,6 @@ import (
 	"doctor-patient-cli/utils"
 	"fmt"
 	"github.com/fatih/color"
-	"golang.org/x/crypto/ssh/terminal"
-	"os"
 )
 
 func Signup() {
@@ -36,8 +34,7 @@ func Signup() {
 
 	for {
 		color.Magenta("Enter Password: ")
-		passwordBytes, _ := terminal.ReadPassword(int(os.Stdin.Fd()))
-		user.Password = string(passwordBytes)
+		user.Password = utils.PromptPassword("Enter")
 		if !utils.ValidatePassword(user.Password) {
 			color.Red("🚨 Password criteria doesn't match")
 			continue
