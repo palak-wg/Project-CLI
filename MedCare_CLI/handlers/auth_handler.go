@@ -22,27 +22,20 @@ func (handler *UserHandler) Signup(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 
 		w.WriteHeader(http.StatusBadRequest)
-		err := json.NewEncoder(w).Encode(models.APIResponse{
+		_ = json.NewEncoder(w).Encode(models.APIResponse{
 			Status: http.StatusBadRequest,
 			Data:   http.StatusText(http.StatusBadRequest),
 		})
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
-
 		return
 	}
 
 	if id, err := handler.service.GetUserByID(user.UserID); id != nil && err == nil {
 		w.WriteHeader(http.StatusBadRequest)
-		err := json.NewEncoder(w).Encode(models.APIResponse{
+		_ = json.NewEncoder(w).Encode(models.APIResponse{
 			Status: http.StatusBadRequest,
 			Data:   "This username already exists.",
 		})
 		loggerZap.Info("Username already exists")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
 		return
 	}
 
@@ -52,23 +45,17 @@ func (handler *UserHandler) Signup(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println("create user error")
 		w.WriteHeader(http.StatusInternalServerError)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
+		_ = json.NewEncoder(w).Encode(models.APIResponse{
 			Status: http.StatusInternalServerError,
 			Data:   http.StatusText(http.StatusInternalServerError),
 		})
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
 		return
 	}
 	w.WriteHeader(http.StatusCreated)
-	err = json.NewEncoder(w).Encode(models.APIResponse{
+	_ = json.NewEncoder(w).Encode(models.APIResponse{
 		Status: http.StatusCreated,
 		Data:   http.StatusText(http.StatusCreated),
 	})
-	if err != nil {
-		loggerZap.Error("Encoding response")
-	}
 }
 
 func (handler *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
@@ -82,40 +69,30 @@ func (handler *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 
 		w.WriteHeader(http.StatusBadRequest)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
+		_ = json.NewEncoder(w).Encode(models.APIResponse{
 			Status: http.StatusBadRequest,
 			Data:   http.StatusText(http.StatusBadRequest),
 		})
-
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
 		return
 	}
 
 	user, err := handler.service.GetUserByID(client.UserID)
 	if err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
+		_ = json.NewEncoder(w).Encode(models.APIResponse{
 			Status: http.StatusUnauthorized,
 			Data:   http.StatusText(http.StatusUnauthorized),
 		})
 		loggerZap.Error("Unauthorized user")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
 		return
 	}
 	if !utils.CheckPasswordHash(client.Password, user.Password) {
 		w.WriteHeader(http.StatusUnauthorized)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
+		_ = json.NewEncoder(w).Encode(models.APIResponse{
 			Status: http.StatusUnauthorized,
 			Data:   http.StatusText(http.StatusUnauthorized),
 		})
 		loggerZap.Error("Unauthorized user")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
 		return
 	}
 	generatedToken, err := tokens.GenerateToken(user.UserType, user.UserID, user.IsApproved)
@@ -126,9 +103,6 @@ func (handler *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 			Data:   http.StatusText(http.StatusInternalServerError),
 		})
 		loggerZap.Error("Internal Server Error")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
 		return
 	}
 	w.WriteHeader(http.StatusOK)
@@ -139,10 +113,6 @@ func (handler *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 		Code:  http.StatusOK,
 		Token: generatedToken,
 	}
-	err = json.NewEncoder(w).Encode(response)
-	if err != nil {
-		loggerZap.Error("Encoding response")
-	} else {
-		loggerZap.Info("Successfully logged in & token sent")
-	}
+	_ = json.NewEncoder(w).Encode(response)
+	loggerZap.Info("Successfully logged in & token sent")
 }

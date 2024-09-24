@@ -33,40 +33,57 @@ func (handler *NotificationHandler) GetNotifications(w http.ResponseWriter, r *h
 	if role == "doctor" || role == "patient" {
 		if tokenID != userID {
 			w.WriteHeader(http.StatusForbidden)
-			err := json.NewEncoder(w).Encode(models.APIResponse{
+			_ = json.NewEncoder(w).Encode(models.APIResponse{
 				Status: http.StatusForbidden,
 				Data:   "Access denied",
 			})
 			loggerZap.Error("Access denied for user")
-			if err != nil {
-				loggerZap.Error("Encoding response")
-			}
 			return
 		}
 	}
 
-	// Fetch the user profile
+	// Fetch notifications
 	notifications, err := handler.service.GetNotificationsByUserID(userID)
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
+		_ = json.NewEncoder(w).Encode(models.APIResponse{
 			Status: http.StatusNotFound,
 			Data:   http.StatusText(http.StatusNotFound),
 		})
 		loggerZap.Error("User not found")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
 		return
 	}
 	loggerZap.Info("Notification fetched successfully")
 
 	w.WriteHeader(http.StatusOK)
-	err = json.NewEncoder(w).Encode(models.APIResponse{
+	_ = json.NewEncoder(w).Encode(models.APIResponse{
 		Status: http.StatusOK,
 		Data:   notifications,
 	})
+}
+
+func (handler *NotificationHandler) AllNotifications(w http.ResponseWriter, r *http.Request) {
+	loggerZap, _ := zap.NewProduction()
+	defer loggerZap.Sync()
+
+	w.Header().Set("Content-Type", "application/json")
+
+	// Fetch notifications
+	notifications, err := handler.service.GetAllNotifications()
 	if err != nil {
-		loggerZap.Error("Encoding response")
+		w.WriteHeader(http.StatusNotFound)
+		_ = json.NewEncoder(w).Encode(models.APIResponse{
+			Status: http.StatusNotFound,
+			Data:   http.StatusText(http.StatusNotFound),
+		})
+		loggerZap.Error("User not found")
+		return
 	}
+	loggerZap.Info("Notification fetched successfully")
+
+	w.WriteHeader(http.StatusOK)
+	_ = json.NewEncoder(w).Encode(models.APIResponse{
+		Status: http.StatusOK,
+		Data:   notifications,
+	})
 }

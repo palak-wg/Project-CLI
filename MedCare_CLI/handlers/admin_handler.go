@@ -65,14 +65,11 @@ func (handler *AdminHandler) GetPendingDoctors(w http.ResponseWriter, request *h
 	pendingDoctors, err := handler.service.GetPendingDoctorRequests()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
+		_ = json.NewEncoder(w).Encode(models.APIResponse{
 			Status: http.StatusInternalServerError,
 			Data:   "Error fetching pending requests",
 		})
 		loggerZap.Error("Internal Server Error fetching signup requests")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
 		return
 	}
 
@@ -87,13 +84,10 @@ func (handler *AdminHandler) GetPendingDoctors(w http.ResponseWriter, request *h
 
 	// Prepare response
 	w.WriteHeader(http.StatusOK)
-	err = json.NewEncoder(w).Encode(models.APIResponse{
+	_ = json.NewEncoder(w).Encode(models.APIResponse{
 		Status: http.StatusOK,
 		Data:   responseUsers,
 	})
-	if err != nil {
-		loggerZap.Error("Encoding response")
-	}
 }
 
 func (handler *AdminHandler) ApprovePendingDoctors(w http.ResponseWriter, r *http.Request) {
@@ -107,14 +101,11 @@ func (handler *AdminHandler) ApprovePendingDoctors(w http.ResponseWriter, r *htt
 	err := json.NewDecoder(r.Body).Decode(&doctor)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
+		_ = json.NewEncoder(w).Encode(models.APIResponse{
 			Status: http.StatusInternalServerError,
 			Data:   "Error decoding body",
 		})
 		loggerZap.Error("Internal Server Error decoding body")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
 		return
 	}
 
@@ -122,14 +113,11 @@ func (handler *AdminHandler) ApprovePendingDoctors(w http.ResponseWriter, r *htt
 	err = handler.service.ApproveDoctorSignup(doctor.ID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
+		_ = json.NewEncoder(w).Encode(models.APIResponse{
 			Status: http.StatusInternalServerError,
 			Data:   "Error approving doctor profile for signup",
 		})
 		loggerZap.Error("Internal Server Error approving doctor profile")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
 		return
 	}
 
@@ -137,11 +125,8 @@ func (handler *AdminHandler) ApprovePendingDoctors(w http.ResponseWriter, r *htt
 
 	// Prepare response
 	w.WriteHeader(http.StatusOK)
-	err = json.NewEncoder(w).Encode(models.APIResponse{
+	_ = json.NewEncoder(w).Encode(models.APIResponse{
 		Status: http.StatusOK,
 		Data:   fmt.Sprintf("Approved doctor %s signup", doctor.ID),
 	})
-	if err != nil {
-		loggerZap.Error("Encoding response")
-	}
 }

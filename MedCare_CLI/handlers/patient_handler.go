@@ -24,25 +24,25 @@ func (handler *PatientHandler) UpdateProfile(w http.ResponseWriter, r *http.Requ
 
 	w.Header().Set("Content-Type", "application/json")
 
-	var user models.Patient
+	var user models.User
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
 
 		w.WriteHeader(http.StatusBadRequest)
-		err := json.NewEncoder(w).Encode(models.APIResponse{
+		_ = json.NewEncoder(w).Encode(models.APIResponse{
 			Status: http.StatusBadRequest,
 			Data:   http.StatusText(http.StatusBadRequest),
 		})
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
 
 		return
 	}
 
 	user.UserID, _ = r.Context().Value(middlewares.UserIdKey).(string)
+	patient := models.Patient{
+		User: user,
+	}
 
-	err = handler.service.UpdatePatientDetails(&user)
+	err = handler.service.UpdatePatientDetails(&patient)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		err = json.NewEncoder(w).Encode(models.APIResponse{
@@ -50,6 +50,7 @@ func (handler *PatientHandler) UpdateProfile(w http.ResponseWriter, r *http.Requ
 			Data:   http.StatusText(http.StatusBadRequest),
 		})
 		loggerZap.Error("Error Updating profile")
+		return
 	}
 
 	w.WriteHeader(http.StatusOK)

@@ -58,7 +58,7 @@ func (repo *AppointmentRepositoryImpl) ApproveAppointment(appointmentID int) err
 }
 
 func (repo *AppointmentRepositoryImpl) GetPendingAppointmentsByDoctorID(doctorID string) ([]models.Appointment, error) {
-	query := "SELECT appointment_id, patient_id FROM appointments WHERE doctor_id = ? AND is_approved = ?"
+	query := "SELECT appointment_id, patient_id, timestamp FROM appointments WHERE doctor_id = ? AND is_approved = ?"
 	rows, err := repo.db.Query(query, doctorID, false)
 	if err != nil {
 		log.Printf("Error fetching appointments: %v", err)
@@ -69,7 +69,7 @@ func (repo *AppointmentRepositoryImpl) GetPendingAppointmentsByDoctorID(doctorID
 	var appointments []models.Appointment
 	for rows.Next() {
 		var appointment models.Appointment
-		_ = rows.Scan(&appointment.AppointmentID, &appointment.PatientID)
+		_ = rows.Scan(&appointment.AppointmentID, &appointment.PatientID, &appointment.DateTime)
 		appointments = append(appointments, appointment)
 	}
 	return appointments, nil

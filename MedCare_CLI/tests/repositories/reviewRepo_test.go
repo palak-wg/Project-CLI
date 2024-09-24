@@ -25,12 +25,12 @@ func TestAddReview_Success(t *testing.T) {
 		DoctorID:  "doctor456",
 		Content:   "Excellent service",
 		Rating:    5,
-		Timestamp: []uint8("09-09-2024"),
+		Timestamp: "09-09-2024",
 	}
 
 	// Expect a successful INSERT into the reviews table
 	mock.ExpectExec("INSERT INTO reviews").
-		WithArgs(review.PatientID, review.DoctorID, review.Content, review.Rating, review.Timestamp).
+		WithArgs(review.PatientID, review.DoctorID, review.Content, review.Rating).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 
 	// Call the AddReview function
@@ -58,12 +58,12 @@ func TestAddReview_Failure(t *testing.T) {
 		DoctorID:  "doctor456",
 		Content:   "Excellent service",
 		Rating:    5,
-		Timestamp: []uint8("09-09-2024"),
+		Timestamp: "09-09-2024",
 	}
 
 	// Simulate an error during the INSERT operation
 	mock.ExpectExec("INSERT INTO reviews").
-		WithArgs(review.PatientID, review.DoctorID, review.Content, review.Rating, review.Timestamp).
+		WithArgs(review.PatientID, review.DoctorID, review.Content, review.Rating).
 		WillReturnError(errors.New("insert failed"))
 
 	// Call the AddReview function
@@ -135,7 +135,7 @@ func TestReviewRepository_GetReviewsByDoctorID(t *testing.T) {
 		WithArgs(1).
 		WillReturnRows(rows)
 
-	reviews, err := repo.GetReviewsByDoctorID(1)
+	reviews, err := repo.GetReviewsByDoctorID("1")
 	assert.NoError(t, err)
 	assert.Len(t, reviews, 1)
 	assert.Equal(t, "p123", reviews[0].PatientID)
@@ -155,7 +155,7 @@ func TestReviewRepository_GetReviewsByDoctorID_Error(t *testing.T) {
 		WithArgs(1).
 		WillReturnError(sql.ErrConnDone)
 
-	reviews, err := repo.GetReviewsByDoctorID(1)
+	reviews, err := repo.GetReviewsByDoctorID("1")
 	assert.Error(t, err)
 	assert.Nil(t, reviews)
 }

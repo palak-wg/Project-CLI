@@ -34,14 +34,11 @@ func (handler *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 	if role == "doctor" || role == "patient" {
 		if tokenID != userID {
 			w.WriteHeader(http.StatusForbidden)
-			err := json.NewEncoder(w).Encode(models.APIResponse{
+			_ = json.NewEncoder(w).Encode(models.APIResponse{
 				Status: http.StatusForbidden,
 				Data:   "Access denied",
 			})
 			loggerZap.Error("Access denied for user")
-			if err != nil {
-				loggerZap.Error("Encoding response")
-			}
 			return
 		}
 	}
@@ -50,14 +47,11 @@ func (handler *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 	user, err := handler.service.GetUserByID(userID)
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
+		_ = json.NewEncoder(w).Encode(models.APIResponse{
 			Status: http.StatusNotFound,
 			Data:   http.StatusText(http.StatusNotFound),
 		})
 		loggerZap.Error("User not found")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
 		return
 	}
 
@@ -71,11 +65,8 @@ func (handler *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 		PhoneNumber: user.PhoneNumber,
 	}
 	w.WriteHeader(http.StatusOK)
-	err = json.NewEncoder(w).Encode(models.APIResponse{
+	_ = json.NewEncoder(w).Encode(models.APIResponse{
 		Status: http.StatusOK,
 		Data:   response,
 	})
-	if err != nil {
-		loggerZap.Error("Encoding response")
-	}
 }

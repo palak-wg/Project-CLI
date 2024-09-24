@@ -44,14 +44,10 @@ func (handler *AppointmentHandler) GetAppointments(w http.ResponseWriter, r *htt
 		if err != nil {
 
 			w.WriteHeader(http.StatusBadRequest)
-			err := json.NewEncoder(w).Encode(models.APIResponse{
+			_ = json.NewEncoder(w).Encode(models.APIResponse{
 				Status: http.StatusBadRequest,
 				Data:   http.StatusText(http.StatusBadRequest),
 			})
-			if err != nil {
-				loggerZap.Error("Encoding response")
-			}
-
 			return
 		}
 		id = user.UserID
@@ -68,26 +64,20 @@ func (handler *AppointmentHandler) GetAppointments(w http.ResponseWriter, r *htt
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
+		_ = json.NewEncoder(w).Encode(models.APIResponse{
 			Status: http.StatusInternalServerError,
 			Data:   "Error fetching appointments",
 		})
 		loggerZap.Error("Error fetching appointments")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
 		return
 	}
 
 	// Prepare response
 	w.WriteHeader(http.StatusOK)
-	err = json.NewEncoder(w).Encode(models.APIResponse{
+	_ = json.NewEncoder(w).Encode(models.APIResponse{
 		Status: http.StatusOK,
 		Data:   appointments,
 	})
-	if err != nil {
-		loggerZap.Error("Encoding response")
-	}
 }
 
 func (handler *AppointmentHandler) CreateAppointment(w http.ResponseWriter, r *http.Request) {
@@ -103,21 +93,18 @@ func (handler *AppointmentHandler) CreateAppointment(w http.ResponseWriter, r *h
 	err := json.NewDecoder(r.Body).Decode(&appointment)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		err := json.NewEncoder(w).Encode(models.APIResponse{
+		_ = json.NewEncoder(w).Encode(models.APIResponse{
 			Status: http.StatusInternalServerError,
 			Data:   "Error decoding request body",
 		})
 		loggerZap.Error("Decoding request body")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
 		return
 	}
 
 	if role == "patient" || role == "doctor" {
 		if appointment.PatientID != id {
 			w.WriteHeader(http.StatusBadRequest)
-			err = json.NewEncoder(w).Encode(models.APIResponse{
+			_ = json.NewEncoder(w).Encode(models.APIResponse{
 				Status: http.StatusBadRequest,
 				Data:   http.StatusText(http.StatusBadRequest),
 			})
@@ -129,26 +116,20 @@ func (handler *AppointmentHandler) CreateAppointment(w http.ResponseWriter, r *h
 	err = handler.service.SendAppointmentRequest(appointment.PatientID, appointment.DoctorID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
+		_ = json.NewEncoder(w).Encode(models.APIResponse{
 			Status: http.StatusInternalServerError,
 			Data:   "Error sending appointment",
 		})
 		loggerZap.Error("Error sending appointment")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
 		return
 	}
 
 	// Add success response here
 	w.WriteHeader(http.StatusOK)
-	err = json.NewEncoder(w).Encode(models.APIResponse{
+	_ = json.NewEncoder(w).Encode(models.APIResponse{
 		Status: http.StatusOK,
 		Data:   "Appointment created successfully",
 	})
-	if err != nil {
-		loggerZap.Error("Encoding success response")
-	}
 }
 
 func (handler *AppointmentHandler) UpdateAppointment(w http.ResponseWriter, r *http.Request) {
@@ -164,20 +145,16 @@ func (handler *AppointmentHandler) UpdateAppointment(w http.ResponseWriter, r *h
 	if err != nil {
 
 		w.WriteHeader(http.StatusBadRequest)
-		err := json.NewEncoder(w).Encode(models.APIResponse{
+		_ = json.NewEncoder(w).Encode(models.APIResponse{
 			Status: http.StatusBadRequest,
 			Data:   http.StatusText(http.StatusBadRequest),
 		})
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
-
 		return
 	}
 
 	if role == "patient" {
 		w.WriteHeader(http.StatusBadRequest)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
+		_ = json.NewEncoder(w).Encode(models.APIResponse{
 			Status: http.StatusBadRequest,
 			Data:   http.StatusText(http.StatusBadRequest),
 		})
@@ -188,7 +165,7 @@ func (handler *AppointmentHandler) UpdateAppointment(w http.ResponseWriter, r *h
 	err = handler.service.ApproveAppointment(appointment.AppointmentID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
+		_ = json.NewEncoder(w).Encode(models.APIResponse{
 			Status: http.StatusInternalServerError,
 			Data:   "Error approving appointment",
 		})

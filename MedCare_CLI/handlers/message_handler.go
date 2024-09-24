@@ -60,20 +60,18 @@ func (handler *MessageHandler) AddMessage(w http.ResponseWriter, r *http.Request
 	if err != nil {
 
 		w.WriteHeader(http.StatusBadRequest)
-		err := json.NewEncoder(w).Encode(models.APIResponse{
+		_ = json.NewEncoder(w).Encode(models.APIResponse{
 			Status: http.StatusBadRequest,
 			Data:   http.StatusText(http.StatusBadRequest),
 		})
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
 
 		return
 	}
 
 	userID, _ := r.Context().Value(middlewares.UserIdKey).(string)
+	role, _ := r.Context().Value(middlewares.RoleKey).(string)
 
-	if userID != message.Sender {
+	if userID != message.Sender && role != "admin" {
 		w.WriteHeader(http.StatusBadRequest)
 		err = json.NewEncoder(w).Encode(models.APIResponse{
 			Status: http.StatusBadRequest,

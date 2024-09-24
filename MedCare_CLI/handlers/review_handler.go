@@ -33,9 +33,6 @@ func (handler *ReviewHandler) GetAllReview(w http.ResponseWriter, r *http.Reques
 			Data:   "Error fetching reviews",
 		})
 		loggerZap.Error("Internal Server Error fetching reviews")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
 		return
 	}
 	loggerZap.Info("Successfully fetched reviews")
@@ -46,9 +43,6 @@ func (handler *ReviewHandler) GetAllReview(w http.ResponseWriter, r *http.Reques
 		Status: http.StatusOK,
 		Data:   reviews,
 	})
-	if err != nil {
-		loggerZap.Error("Encoding response")
-	}
 }
 
 func (handler *ReviewHandler) CreateReview(w http.ResponseWriter, r *http.Request) {
@@ -67,9 +61,6 @@ func (handler *ReviewHandler) CreateReview(w http.ResponseWriter, r *http.Reques
 			Data:   "Error decoding body",
 		})
 		loggerZap.Error("Internal Server Error decoding body")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
 		return
 	}
 
@@ -83,9 +74,6 @@ func (handler *ReviewHandler) CreateReview(w http.ResponseWriter, r *http.Reques
 			Data:   "Error extracting claims",
 		})
 		loggerZap.Error("Internal Server Error")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
 		return
 	}
 
@@ -93,7 +81,7 @@ func (handler *ReviewHandler) CreateReview(w http.ResponseWriter, r *http.Reques
 	tokenID := claims["id"].(string)
 	role := claims["role"].(string)
 
-	if (tokenID != review.PatientID) || (role != "patient") {
+	if (tokenID != review.PatientID && role != "admin") || (role == "doctor") {
 		w.WriteHeader(http.StatusUnauthorized)
 		err = json.NewEncoder(w).Encode(models.APIResponse{
 			Status: http.StatusUnauthorized,
@@ -112,9 +100,6 @@ func (handler *ReviewHandler) CreateReview(w http.ResponseWriter, r *http.Reques
 			Data:   "Error adding review",
 		})
 		loggerZap.Error("Internal Server Error adding review")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
 		return
 	}
 	loggerZap.Info("Successfully added review")
@@ -125,12 +110,7 @@ func (handler *ReviewHandler) CreateReview(w http.ResponseWriter, r *http.Reques
 		Status: http.StatusOK,
 		Data:   "Successfully added review",
 	})
-	if err != nil {
-		loggerZap.Error("Encoding response")
-	}
 }
-
-func (handler *ReviewHandler) DeleteReview(w http.ResponseWriter, r *http.Request) {}
 
 func (handler *ReviewHandler) GetDoctorSpecificReviews(w http.ResponseWriter, r *http.Request) {
 	loggerZap, _ := zap.NewProduction()
@@ -144,25 +124,19 @@ func (handler *ReviewHandler) GetDoctorSpecificReviews(w http.ResponseWriter, r 
 	reviews, err := handler.service.GetReviewsByDoctorID(doctorID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
+		_ = json.NewEncoder(w).Encode(models.APIResponse{
 			Status: http.StatusInternalServerError,
 			Data:   "Error fetching reviews",
 		})
 		loggerZap.Error("Internal Server Error fetching reviews")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
 		return
 	}
 	loggerZap.Info("Successfully fetched reviews")
 
 	// Prepare response
 	w.WriteHeader(http.StatusOK)
-	err = json.NewEncoder(w).Encode(models.APIResponse{
+	_ = json.NewEncoder(w).Encode(models.APIResponse{
 		Status: http.StatusOK,
 		Data:   reviews,
 	})
-	if err != nil {
-		loggerZap.Error("Encoding response")
-	}
 }

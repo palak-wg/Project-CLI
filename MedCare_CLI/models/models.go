@@ -24,31 +24,31 @@ type Patient struct {
 	MedicalHistory string `json:"medical_history"`
 }
 type Review struct {
-	PatientID string  `json:"patient_id"`
-	DoctorID  string  `json:"doctor_id"`
-	Content   string  `json:"content"`
-	Rating    int     `json:"rating"`
-	Timestamp []uint8 `json:"time"`
+	PatientID string `json:"patient_id"`
+	DoctorID  string `json:"doctor_id"`
+	Content   string `json:"content"`
+	Rating    int    `json:"rating"`
+	Timestamp string `json:"time"`
 }
 
 type Notification struct {
-	UserID    string  `json:"user_id"`
-	Content   string  `json:"content"`
-	Timestamp []uint8 `json:"time"`
+	UserID    string `json:"user_id"`
+	Content   string `json:"content"`
+	Timestamp string `json:"time"`
 }
 
 type Appointment struct {
-	AppointmentID int     `json:"appointment_id"`
-	DoctorID      string  `json:"doctor_id"`
-	PatientID     string  `json:"patient_id"`
-	DateTime      []uint8 `json:"time"`
-	IsApproved    bool    `json:"is_approved"`
+	AppointmentID int    `json:"appointment_id"`
+	DoctorID      string `json:"doctor_id"`
+	PatientID     string `json:"patient_id"`
+	DateTime      string `json:"time"`
+	IsApproved    bool   `json:"is_approved"`
 }
 
 type Message struct {
-	Sender    string
-	Content   string
-	Receiver  string
-	Timestamp []uint8
-	Status    string
+	Sender    string `json:"sender"`
+	Content   string `json:"content"`
+	Receiver  string `json:"receiver"`
+	Timestamp string `json:"time"`
+	Status    string `json:"status"`
 }

@@ -124,7 +124,7 @@ func TestUpdatePatientDetails_Success(t *testing.T) {
 	}
 
 	// Expect the UPDATE query to be executed successfully
-	mock.ExpectExec("UPDATE patients SET name = \\?, age = \\?, gender = \\?, email = \\?, phone_number = \\?, medical_history = \\? WHERE user_id = \\?").
+	mock.ExpectExec("UPDATE patients SET username = \\?, age = \\?, gender = \\?, email = \\?, phone_number = \\?, medical_history = \\? WHERE user_id = \\?").
 		WithArgs(updatedPatient.Name, updatedPatient.Age, updatedPatient.Gender, updatedPatient.Email, updatedPatient.PhoneNumber, updatedPatient.MedicalHistory, updatedPatient.UserID).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 

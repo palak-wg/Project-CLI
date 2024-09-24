@@ -23,14 +23,11 @@ func (handler DoctorHandler) GetDoctors(w http.ResponseWriter, r *http.Request) 
 	doctors, err := handler.service.GetAllDoctors()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
+		_ = json.NewEncoder(w).Encode(models.APIResponse{
 			Status: http.StatusInternalServerError,
 			Data:   "Error fetching doctors profiles",
 		})
 		loggerZap.Error("Internal Server Error fetching doctors profiles")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
 		return
 	}
 	loggerZap.Info("Fetched all doctor profiles")
@@ -47,13 +44,11 @@ func (handler DoctorHandler) GetDoctors(w http.ResponseWriter, r *http.Request) 
 
 	// Prepare response
 	w.WriteHeader(http.StatusOK)
-	err = json.NewEncoder(w).Encode(models.APIResponse{
+	_ = json.NewEncoder(w).Encode(models.APIResponse{
 		Status: http.StatusOK,
 		Data:   responseDoctors,
 	})
-	if err != nil {
-		loggerZap.Error("Encoding response")
-	}
+
 }
 
 func (handler DoctorHandler) GetDoctor(w http.ResponseWriter, r *http.Request) {
@@ -66,14 +61,11 @@ func (handler DoctorHandler) GetDoctor(w http.ResponseWriter, r *http.Request) {
 	doctor, err := handler.service.GetDoctorByID(mux.Vars(r)["doctor_id"])
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
-		err = json.NewEncoder(w).Encode(models.APIResponse{
+		_ = json.NewEncoder(w).Encode(models.APIResponse{
 			Status: http.StatusNotFound,
 			Data:   http.StatusText(http.StatusNotFound),
 		})
 		loggerZap.Error("User not found")
-		if err != nil {
-			loggerZap.Error("Encoding response")
-		}
 		return
 	}
 
@@ -85,14 +77,10 @@ func (handler DoctorHandler) GetDoctor(w http.ResponseWriter, r *http.Request) {
 		Rating:         doctor.Rating,
 	}
 	w.WriteHeader(http.StatusOK)
-	err = json.NewEncoder(w).Encode(models.APIResponse{
+	_ = json.NewEncoder(w).Encode(models.APIResponse{
 		Status: http.StatusOK,
 		Data:   response,
 	})
-	if err != nil {
-		loggerZap.Error("Encoding response")
-	}
-
 }
 
 func NewDoctorHandler(service interfaces.DoctorService) *DoctorHandler {

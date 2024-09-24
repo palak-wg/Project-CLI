@@ -12,11 +12,6 @@ type AdminService struct {
 	userRepo  interfaces.UserRepository
 }
 
-//func (service *AdminService) PendingDoctorSignupRequest() ([]models.Doctor, error) {
-//	//TODO implement me
-//	panic("implement me")
-//}
-
 func NewAdminService(adminRepo interfaces.AdminRepository, userRepo interfaces.UserRepository) *AdminService {
 	return &AdminService{
 		adminRepo: adminRepo,

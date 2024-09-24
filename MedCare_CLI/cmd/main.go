@@ -54,7 +54,7 @@ func main() {
 		apiRouter.HandleFunc("/appointments", appointmentHandler.GetAppointments).Methods("GET")
 		apiRouter.HandleFunc("/appointments", appointmentHandler.CreateAppointment).Methods("POST")
 		apiRouter.HandleFunc("/appointments", appointmentHandler.UpdateAppointment).Methods("PATCH")
-		apiRouter.HandleFunc("/users/{user_id}", patientHandler.UpdateProfile).Methods("PUT")
+		apiRouter.HandleFunc("/users", patientHandler.UpdateProfile).Methods("PUT")
 		apiRouter.HandleFunc("/messages", messageHandler.GetMessages).Methods("GET")
 		apiRouter.HandleFunc("/messages", messageHandler.AddMessage).Methods("POST")
 
@@ -63,9 +63,9 @@ func main() {
 		adminRouter.Use(middlewares.AuthenticationMiddleware)
 
 		adminRouter.HandleFunc("/users", adminHandler.GetUsers).Methods("GET")
-		adminRouter.HandleFunc("/notifications", notificationHandler.GetNotifications).Methods("GET")
+		adminRouter.HandleFunc("/notifications", notificationHandler.AllNotifications).Methods("GET")
 		adminRouter.HandleFunc("/doctors/approval", adminHandler.GetPendingDoctors).Methods("GET")
-		adminRouter.HandleFunc("/doctors/approval/{doctor_id}", adminHandler.ApprovePendingDoctors).Methods("POST")
+		adminRouter.HandleFunc("/doctors/approval", adminHandler.ApprovePendingDoctors).Methods("PATCH")
 		adminRouter.HandleFunc("/reviews", reviewHandler.GetAllReview).Methods("GET")
 
 		// starting of the server
