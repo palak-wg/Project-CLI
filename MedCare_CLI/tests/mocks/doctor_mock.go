@@ -106,99 +106,99 @@ func (mr *MockDoctorRepositoryMockRecorder) ViewDoctorSpecificProfile(doctorID i
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ViewDoctorSpecificProfile", reflect.TypeOf((*MockDoctorRepository)(nil).ViewDoctorSpecificProfile), doctorID)
 }
-//
-//// MockDoctorService is a mock of DoctorService interface.
-//type MockDoctorService struct {
-//	ctrl     *gomock.Controller
-//	recorder *MockDoctorServiceMockRecorder
-//}
-//
-//// MockDoctorServiceMockRecorder is the mock recorder for MockDoctorService.
-//type MockDoctorServiceMockRecorder struct {
-//	mock *MockDoctorService
-//}
-//
-//// NewMockDoctorService creates a new mock instance.
-//func NewMockDoctorService(ctrl *gomock.Controller) *MockDoctorService {
-//	mock := &MockDoctorService{ctrl: ctrl}
-//	mock.recorder = &MockDoctorServiceMockRecorder{mock}
-//	return mock
-//}
-//
-//// EXPECT returns an object that allows the caller to indicate expected use.
-//func (m *MockDoctorService) EXPECT() *MockDoctorServiceMockRecorder {
-//	return m.recorder
-//}
-//
-//// GetAllDoctors mocks base method.
-//func (m *MockDoctorService) GetAllDoctors() ([]models.Doctor, error) {
-//	m.ctrl.T.Helper()
-//	ret := m.ctrl.Call(m, "GetAllDoctors")
-//	ret0, _ := ret[0].([]models.Doctor)
-//	ret1, _ := ret[1].(error)
-//	return ret0, ret1
-//}
-//
-//// GetAllDoctors indicates an expected call of GetAllDoctors.
-//func (mr *MockDoctorServiceMockRecorder) GetAllDoctors() *gomock.Call {
-//	mr.mock.ctrl.T.Helper()
-//	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllDoctors", reflect.TypeOf((*MockDoctorService)(nil).GetAllDoctors))
-//}
-//
-//// GetDoctorByID mocks base method.
-//func (m *MockDoctorService) GetDoctorByID(doctorID string) (*models.Doctor, error) {
-//	m.ctrl.T.Helper()
-//	ret := m.ctrl.Call(m, "GetDoctorByID", doctorID)
-//	ret0, _ := ret[0].(*models.Doctor)
-//	ret1, _ := ret[1].(error)
-//	return ret0, ret1
-//}
-//
-//// GetDoctorByID indicates an expected call of GetDoctorByID.
-//func (mr *MockDoctorServiceMockRecorder) GetDoctorByID(doctorID interface{}) *gomock.Call {
-//	mr.mock.ctrl.T.Helper()
-//	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetDoctorByID", reflect.TypeOf((*MockDoctorService)(nil).GetDoctorByID), doctorID)
-//}
-//
-//// UpdateDoctorExperience mocks base method.
-//func (m *MockDoctorService) UpdateDoctorExperience(doctorID string, experience int) error {
-//	m.ctrl.T.Helper()
-//	ret := m.ctrl.Call(m, "UpdateDoctorExperience", doctorID, experience)
-//	ret0, _ := ret[0].(error)
-//	return ret0
-//}
-//
-//// UpdateDoctorExperience indicates an expected call of UpdateDoctorExperience.
-//func (mr *MockDoctorServiceMockRecorder) UpdateDoctorExperience(doctorID, experience interface{}) *gomock.Call {
-//	mr.mock.ctrl.T.Helper()
-//	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateDoctorExperience", reflect.TypeOf((*MockDoctorService)(nil).UpdateDoctorExperience), doctorID, experience)
-//}
-//
-//// UpdateDoctorSpecialization mocks base method.
-//func (m *MockDoctorService) UpdateDoctorSpecialization(doctorID, specialization string) error {
-//	m.ctrl.T.Helper()
-//	ret := m.ctrl.Call(m, "UpdateDoctorSpecialization", doctorID, specialization)
-//	ret0, _ := ret[0].(error)
-//	return ret0
-//}
-//
-//// UpdateDoctorSpecialization indicates an expected call of UpdateDoctorSpecialization.
-//func (mr *MockDoctorServiceMockRecorder) UpdateDoctorSpecialization(doctorID, specialization interface{}) *gomock.Call {
-//	mr.mock.ctrl.T.Helper()
-//	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateDoctorSpecialization", reflect.TypeOf((*MockDoctorService)(nil).UpdateDoctorSpecialization), doctorID, specialization)
-//}
-//
-//// ViewDoctorSpecificProfile mocks base method.
-//func (m *MockDoctorService) ViewDoctorSpecificProfile(doctorID string) (*models.Doctor, error) {
-//	m.ctrl.T.Helper()
-//	ret := m.ctrl.Call(m, "ViewDoctorSpecificProfile", doctorID)
-//	ret0, _ := ret[0].(*models.Doctor)
-//	ret1, _ := ret[1].(error)
-//	return ret0, ret1
-//}
-//
-//// ViewDoctorSpecificProfile indicates an expected call of ViewDoctorSpecificProfile.
-//func (mr *MockDoctorServiceMockRecorder) ViewDoctorSpecificProfile(doctorID interface{}) *gomock.Call {
-//	mr.mock.ctrl.T.Helper()
-//	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ViewDoctorSpecificProfile", reflect.TypeOf((*MockDoctorService)(nil).ViewDoctorSpecificProfile), doctorID)
-//}
+
+// MockDoctorService is a mock of DoctorService interface.
+type MockDoctorService struct {
+	ctrl     *gomock.Controller
+	recorder *MockDoctorServiceMockRecorder
+}
+
+// MockDoctorServiceMockRecorder is the mock recorder for MockDoctorService.
+type MockDoctorServiceMockRecorder struct {
+	mock *MockDoctorService
+}
+
+// NewMockDoctorService creates a new mock instance.
+func NewMockDoctorService(ctrl *gomock.Controller) *MockDoctorService {
+	mock := &MockDoctorService{ctrl: ctrl}
+	mock.recorder = &MockDoctorServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockDoctorService) EXPECT() *MockDoctorServiceMockRecorder {
+	return m.recorder
+}
+
+// GetAllDoctors mocks base method.
+func (m *MockDoctorService) GetAllDoctors() ([]models.Doctor, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetAllDoctors")
+	ret0, _ := ret[0].([]models.Doctor)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetAllDoctors indicates an expected call of GetAllDoctors.
+func (mr *MockDoctorServiceMockRecorder) GetAllDoctors() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllDoctors", reflect.TypeOf((*MockDoctorService)(nil).GetAllDoctors))
+}
+
+// GetDoctorByID mocks base method.
+func (m *MockDoctorService) GetDoctorByID(doctorID string) (*models.Doctor, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetDoctorByID", doctorID)
+	ret0, _ := ret[0].(*models.Doctor)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetDoctorByID indicates an expected call of GetDoctorByID.
+func (mr *MockDoctorServiceMockRecorder) GetDoctorByID(doctorID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetDoctorByID", reflect.TypeOf((*MockDoctorService)(nil).GetDoctorByID), doctorID)
+}
+
+// UpdateDoctorExperience mocks base method.
+func (m *MockDoctorService) UpdateDoctorExperience(doctorID string, experience int) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateDoctorExperience", doctorID, experience)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateDoctorExperience indicates an expected call of UpdateDoctorExperience.
+func (mr *MockDoctorServiceMockRecorder) UpdateDoctorExperience(doctorID, experience interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateDoctorExperience", reflect.TypeOf((*MockDoctorService)(nil).UpdateDoctorExperience), doctorID, experience)
+}
+
+// UpdateDoctorSpecialization mocks base method.
+func (m *MockDoctorService) UpdateDoctorSpecialization(doctorID, specialization string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateDoctorSpecialization", doctorID, specialization)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateDoctorSpecialization indicates an expected call of UpdateDoctorSpecialization.
+func (mr *MockDoctorServiceMockRecorder) UpdateDoctorSpecialization(doctorID, specialization interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateDoctorSpecialization", reflect.TypeOf((*MockDoctorService)(nil).UpdateDoctorSpecialization), doctorID, specialization)
+}
+
+// ViewDoctorSpecificProfile mocks base method.
+func (m *MockDoctorService) ViewDoctorSpecificProfile(doctorID string) (*models.Doctor, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ViewDoctorSpecificProfile", doctorID)
+	ret0, _ := ret[0].(*models.Doctor)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ViewDoctorSpecificProfile indicates an expected call of ViewDoctorSpecificProfile.
+func (mr *MockDoctorServiceMockRecorder) ViewDoctorSpecificProfile(doctorID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ViewDoctorSpecificProfile", reflect.TypeOf((*MockDoctorService)(nil).ViewDoctorSpecificProfile), doctorID)
+}

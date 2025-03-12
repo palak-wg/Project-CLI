@@ -75,44 +75,44 @@ type MockNotificationServiceMockRecorder struct {
 	mock *MockNotificationService
 }
 
-//// NewMockNotificationService creates a new mock instance.
-//func NewMockNotificationService(ctrl *gomock.Controller) *MockNotificationService {
-//	mock := &MockNotificationService{ctrl: ctrl}
-//	mock.recorder = &MockNotificationServiceMockRecorder{mock}
-//	return mock
-//}
-//
-//// EXPECT returns an object that allows the caller to indicate expected use.
-//func (m *MockNotificationService) EXPECT() *MockNotificationServiceMockRecorder {
-//	return m.recorder
-//}
-//
-//// GetAllNotifications mocks base method.
-//func (m *MockNotificationService) GetAllNotifications() ([]models.Notification, error) {
-//	m.ctrl.T.Helper()
-//	ret := m.ctrl.Call(m, "GetAllNotifications")
-//	ret0, _ := ret[0].([]models.Notification)
-//	ret1, _ := ret[1].(error)
-//	return ret0, ret1
-//}
-//
-//// GetAllNotifications indicates an expected call of GetAllNotifications.
-//func (mr *MockNotificationServiceMockRecorder) GetAllNotifications() *gomock.Call {
-//	mr.mock.ctrl.T.Helper()
-//	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllNotifications", reflect.TypeOf((*MockNotificationService)(nil).GetAllNotifications))
-//}
-//
-//// GetNotificationsByUserID mocks base method.
-//func (m *MockNotificationService) GetNotificationsByUserID(userID string) ([]models.Notification, error) {
-//	m.ctrl.T.Helper()
-//	ret := m.ctrl.Call(m, "GetNotificationsByUserID", userID)
-//	ret0, _ := ret[0].([]models.Notification)
-//	ret1, _ := ret[1].(error)
-//	return ret0, ret1
-//}
-//
-//// GetNotificationsByUserID indicates an expected call of GetNotificationsByUserID.
-//func (mr *MockNotificationServiceMockRecorder) GetNotificationsByUserID(userID interface{}) *gomock.Call {
-//	mr.mock.ctrl.T.Helper()
-//	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetNotificationsByUserID", reflect.TypeOf((*MockNotificationService)(nil).GetNotificationsByUserID), userID)
-//}
+// NewMockNotificationService creates a new mock instance.
+func NewMockNotificationService(ctrl *gomock.Controller) *MockNotificationService {
+	mock := &MockNotificationService{ctrl: ctrl}
+	mock.recorder = &MockNotificationServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockNotificationService) EXPECT() *MockNotificationServiceMockRecorder {
+	return m.recorder
+}
+
+// GetAllNotifications mocks base method.
+func (m *MockNotificationService) GetAllNotifications() ([]models.Notification, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetAllNotifications")
+	ret0, _ := ret[0].([]models.Notification)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetAllNotifications indicates an expected call of GetAllNotifications.
+func (mr *MockNotificationServiceMockRecorder) GetAllNotifications() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllNotifications", reflect.TypeOf((*MockNotificationService)(nil).GetAllNotifications))
+}
+
+// GetNotificationsByUserID mocks base method.
+func (m *MockNotificationService) GetNotificationsByUserID(userID string) ([]models.Notification, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetNotificationsByUserID", userID)
+	ret0, _ := ret[0].([]models.Notification)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetNotificationsByUserID indicates an expected call of GetNotificationsByUserID.
+func (mr *MockNotificationServiceMockRecorder) GetNotificationsByUserID(userID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetNotificationsByUserID", reflect.TypeOf((*MockNotificationService)(nil).GetNotificationsByUserID), userID)
+}

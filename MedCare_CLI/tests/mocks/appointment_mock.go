@@ -103,72 +103,72 @@ type MockAppointmentServiceMockRecorder struct {
 	mock *MockAppointmentService
 }
 
-//// NewMockAppointmentService creates a new mock instance.
-//func NewMockAppointmentService(ctrl *gomock.Controller) *MockAppointmentService {
-//	mock := &MockAppointmentService{ctrl: ctrl}
-//	mock.recorder = &MockAppointmentServiceMockRecorder{mock}
-//	return mock
-//}
-//
-//// EXPECT returns an object that allows the caller to indicate expected use.
-//func (m *MockAppointmentService) EXPECT() *MockAppointmentServiceMockRecorder {
-//	return m.recorder
-//}
-//
-//// ApproveAppointment mocks base method.
-//func (m *MockAppointmentService) ApproveAppointment(appointmentID int) error {
-//	m.ctrl.T.Helper()
-//	ret := m.ctrl.Call(m, "ApproveAppointment", appointmentID)
-//	ret0, _ := ret[0].(error)
-//	return ret0
-//}
-//
-//// ApproveAppointment indicates an expected call of ApproveAppointment.
-//func (mr *MockAppointmentServiceMockRecorder) ApproveAppointment(appointmentID interface{}) *gomock.Call {
-//	mr.mock.ctrl.T.Helper()
-//	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ApproveAppointment", reflect.TypeOf((*MockAppointmentService)(nil).ApproveAppointment), appointmentID)
-//}
-//
-//// GetAppointmentsByDoctorID mocks base method.
-//func (m *MockAppointmentService) GetAppointmentsByDoctorID(doctorID string) ([]models.Appointment, error) {
-//	m.ctrl.T.Helper()
-//	ret := m.ctrl.Call(m, "GetAppointmentsByDoctorID", doctorID)
-//	ret0, _ := ret[0].([]models.Appointment)
-//	ret1, _ := ret[1].(error)
-//	return ret0, ret1
-//}
-//
-//// GetAppointmentsByDoctorID indicates an expected call of GetAppointmentsByDoctorID.
-//func (mr *MockAppointmentServiceMockRecorder) GetAppointmentsByDoctorID(doctorID interface{}) *gomock.Call {
-//	mr.mock.ctrl.T.Helper()
-//	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAppointmentsByDoctorID", reflect.TypeOf((*MockAppointmentService)(nil).GetAppointmentsByDoctorID), doctorID)
-//}
-//
-//// GetPendingAppointmentsByDoctorID mocks base method.
-//func (m *MockAppointmentService) GetPendingAppointmentsByDoctorID(doctorID string) ([]models.Appointment, error) {
-//	m.ctrl.T.Helper()
-//	ret := m.ctrl.Call(m, "GetPendingAppointmentsByDoctorID", doctorID)
-//	ret0, _ := ret[0].([]models.Appointment)
-//	ret1, _ := ret[1].(error)
-//	return ret0, ret1
-//}
-//
-//// GetPendingAppointmentsByDoctorID indicates an expected call of GetPendingAppointmentsByDoctorID.
-//func (mr *MockAppointmentServiceMockRecorder) GetPendingAppointmentsByDoctorID(doctorID interface{}) *gomock.Call {
-//	mr.mock.ctrl.T.Helper()
-//	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPendingAppointmentsByDoctorID", reflect.TypeOf((*MockAppointmentService)(nil).GetPendingAppointmentsByDoctorID), doctorID)
-//}
-//
-//// SendAppointmentRequest mocks base method.
-//func (m *MockAppointmentService) SendAppointmentRequest(patientID, doctorID string) error {
-//	m.ctrl.T.Helper()
-//	ret := m.ctrl.Call(m, "SendAppointmentRequest", patientID, doctorID)
-//	ret0, _ := ret[0].(error)
-//	return ret0
-//}
-//
-//// SendAppointmentRequest indicates an expected call of SendAppointmentRequest.
-//func (mr *MockAppointmentServiceMockRecorder) SendAppointmentRequest(patientID, doctorID interface{}) *gomock.Call {
-//	mr.mock.ctrl.T.Helper()
-//	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendAppointmentRequest", reflect.TypeOf((*MockAppointmentService)(nil).SendAppointmentRequest), patientID, doctorID)
-//}
+// NewMockAppointmentService creates a new mock instance.
+func NewMockAppointmentService(ctrl *gomock.Controller) *MockAppointmentService {
+	mock := &MockAppointmentService{ctrl: ctrl}
+	mock.recorder = &MockAppointmentServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockAppointmentService) EXPECT() *MockAppointmentServiceMockRecorder {
+	return m.recorder
+}
+
+// ApproveAppointment mocks base method.
+func (m *MockAppointmentService) ApproveAppointment(appointmentID int) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ApproveAppointment", appointmentID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// ApproveAppointment indicates an expected call of ApproveAppointment.
+func (mr *MockAppointmentServiceMockRecorder) ApproveAppointment(appointmentID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ApproveAppointment", reflect.TypeOf((*MockAppointmentService)(nil).ApproveAppointment), appointmentID)
+}
+
+// GetAppointmentsByDoctorID mocks base method.
+func (m *MockAppointmentService) GetAppointmentsByDoctorID(doctorID string) ([]models.Appointment, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetAppointmentsByDoctorID", doctorID)
+	ret0, _ := ret[0].([]models.Appointment)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetAppointmentsByDoctorID indicates an expected call of GetAppointmentsByDoctorID.
+func (mr *MockAppointmentServiceMockRecorder) GetAppointmentsByDoctorID(doctorID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAppointmentsByDoctorID", reflect.TypeOf((*MockAppointmentService)(nil).GetAppointmentsByDoctorID), doctorID)
+}
+
+// GetPendingAppointmentsByDoctorID mocks base method.
+func (m *MockAppointmentService) GetPendingAppointmentsByDoctorID(doctorID string) ([]models.Appointment, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetPendingAppointmentsByDoctorID", doctorID)
+	ret0, _ := ret[0].([]models.Appointment)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetPendingAppointmentsByDoctorID indicates an expected call of GetPendingAppointmentsByDoctorID.
+func (mr *MockAppointmentServiceMockRecorder) GetPendingAppointmentsByDoctorID(doctorID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPendingAppointmentsByDoctorID", reflect.TypeOf((*MockAppointmentService)(nil).GetPendingAppointmentsByDoctorID), doctorID)
+}
+
+// SendAppointmentRequest mocks base method.
+func (m *MockAppointmentService) SendAppointmentRequest(patientID, doctorID string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SendAppointmentRequest", patientID, doctorID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SendAppointmentRequest indicates an expected call of SendAppointmentRequest.
+func (mr *MockAppointmentServiceMockRecorder) SendAppointmentRequest(patientID, doctorID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendAppointmentRequest", reflect.TypeOf((*MockAppointmentService)(nil).SendAppointmentRequest), patientID, doctorID)
+}

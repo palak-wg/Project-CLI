@@ -29,5 +29,7 @@ var (
 	appointmentService  = services.NewAppointmentService(appointmentRepo)
 	reviewService       = services.NewReviewService(reviewRepo)
 
+	//userHandler = handlers.NewUserHandler(adminService)
+
 	reader = bufio.NewReader(os.Stdin)
 )

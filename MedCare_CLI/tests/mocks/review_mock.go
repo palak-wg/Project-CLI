@@ -64,7 +64,7 @@ func (mr *MockReviewRepositoryMockRecorder) GetAllReviews() *gomock.Call {
 }
 
 // GetReviewsByDoctorID mocks base method.
-func (m *MockReviewRepository) GetReviewsByDoctorID(doctorID int) ([]models.Review, error) {
+func (m *MockReviewRepository) GetReviewsByDoctorID(doctorID string) ([]models.Review, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetReviewsByDoctorID", doctorID)
 	ret0, _ := ret[0].([]models.Review)
@@ -89,58 +89,58 @@ type MockReviewServiceMockRecorder struct {
 	mock *MockReviewService
 }
 
-//// NewMockReviewService creates a new mock instance.
-//func NewMockReviewService(ctrl *gomock.Controller) *MockReviewService {
-//	mock := &MockReviewService{ctrl: ctrl}
-//	mock.recorder = &MockReviewServiceMockRecorder{mock}
-//	return mock
-//}
-//
-//// EXPECT returns an object that allows the caller to indicate expected use.
-//func (m *MockReviewService) EXPECT() *MockReviewServiceMockRecorder {
-//	return m.recorder
-//}
-//
-//// AddReview mocks base method.
-//func (m *MockReviewService) AddReview(review *models.Review) error {
-//	m.ctrl.T.Helper()
-//	ret := m.ctrl.Call(m, "AddReview", review)
-//	ret0, _ := ret[0].(error)
-//	return ret0
-//}
-//
-//// AddReview indicates an expected call of AddReview.
-//func (mr *MockReviewServiceMockRecorder) AddReview(review interface{}) *gomock.Call {
-//	mr.mock.ctrl.T.Helper()
-//	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddReview", reflect.TypeOf((*MockReviewService)(nil).AddReview), review)
-//}
-//
-//// GetAllReviews mocks base method.
-//func (m *MockReviewService) GetAllReviews() ([]models.Review, error) {
-//	m.ctrl.T.Helper()
-//	ret := m.ctrl.Call(m, "GetAllReviews")
-//	ret0, _ := ret[0].([]models.Review)
-//	ret1, _ := ret[1].(error)
-//	return ret0, ret1
-//}
-//
-//// GetAllReviews indicates an expected call of GetAllReviews.
-//func (mr *MockReviewServiceMockRecorder) GetAllReviews() *gomock.Call {
-//	mr.mock.ctrl.T.Helper()
-//	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllReviews", reflect.TypeOf((*MockReviewService)(nil).GetAllReviews))
-//}
-//
-//// GetReviewsByDoctorID mocks base method.
-//func (m *MockReviewService) GetReviewsByDoctorID(doctorID int) ([]models.Review, error) {
-//	m.ctrl.T.Helper()
-//	ret := m.ctrl.Call(m, "GetReviewsByDoctorID", doctorID)
-//	ret0, _ := ret[0].([]models.Review)
-//	ret1, _ := ret[1].(error)
-//	return ret0, ret1
-//}
-//
-//// GetReviewsByDoctorID indicates an expected call of GetReviewsByDoctorID.
-//func (mr *MockReviewServiceMockRecorder) GetReviewsByDoctorID(doctorID interface{}) *gomock.Call {
-//	mr.mock.ctrl.T.Helper()
-//	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetReviewsByDoctorID", reflect.TypeOf((*MockReviewService)(nil).GetReviewsByDoctorID), doctorID)
-//}
+// NewMockReviewService creates a new mock instance.
+func NewMockReviewService(ctrl *gomock.Controller) *MockReviewService {
+	mock := &MockReviewService{ctrl: ctrl}
+	mock.recorder = &MockReviewServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockReviewService) EXPECT() *MockReviewServiceMockRecorder {
+	return m.recorder
+}
+
+// AddReview mocks base method.
+func (m *MockReviewService) AddReview(review *models.Review) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AddReview", review)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// AddReview indicates an expected call of AddReview.
+func (mr *MockReviewServiceMockRecorder) AddReview(review interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddReview", reflect.TypeOf((*MockReviewService)(nil).AddReview), review)
+}
+
+// GetAllReviews mocks base method.
+func (m *MockReviewService) GetAllReviews() ([]models.Review, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetAllReviews")
+	ret0, _ := ret[0].([]models.Review)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetAllReviews indicates an expected call of GetAllReviews.
+func (mr *MockReviewServiceMockRecorder) GetAllReviews() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllReviews", reflect.TypeOf((*MockReviewService)(nil).GetAllReviews))
+}
+
+// GetReviewsByDoctorID mocks base method.
+func (m *MockReviewService) GetReviewsByDoctorID(doctorID string) ([]models.Review, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetReviewsByDoctorID", doctorID)
+	ret0, _ := ret[0].([]models.Review)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetReviewsByDoctorID indicates an expected call of GetReviewsByDoctorID.
+func (mr *MockReviewServiceMockRecorder) GetReviewsByDoctorID(doctorID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetReviewsByDoctorID", reflect.TypeOf((*MockReviewService)(nil).GetReviewsByDoctorID), doctorID)
+}

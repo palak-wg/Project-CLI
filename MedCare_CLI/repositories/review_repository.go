@@ -18,8 +18,8 @@ func NewReviewRepository(db *sql.DB) interfaces.ReviewRepository {
 
 // AddReview inserts a new review into the database
 func (repo *ReviewRepositoryImpl) AddReview(review *models.Review) error {
-	_, err := repo.db.Exec("INSERT INTO reviews (patient_id, doctor_id, content, rating, timestamp) VALUES (?, ?, ?, ?, ?)",
-		review.PatientID, review.DoctorID, review.Content, review.Rating, review.Timestamp)
+	_, err := repo.db.Exec("INSERT INTO reviews (patient_id, doctor_id, content, rating) VALUES (?, ?, ?, ?)",
+		review.PatientID, review.DoctorID, review.Content, review.Rating)
 	if err != nil {
 		log.Printf("Repository: Error adding review for doctorID %s: %v", review.DoctorID, err)
 		return err
@@ -47,10 +47,10 @@ func (repo *ReviewRepositoryImpl) GetAllReviews() ([]models.Review, error) {
 }
 
 // GetReviewsByDoctorID retrieves reviews for a specific doctor from the database
-func (repo *ReviewRepositoryImpl) GetReviewsByDoctorID(doctorID int) ([]models.Review, error) {
+func (repo *ReviewRepositoryImpl) GetReviewsByDoctorID(doctorID string) ([]models.Review, error) {
 	rows, err := repo.db.Query("SELECT patient_id, doctor_id, content, rating, timestamp FROM reviews WHERE doctor_id = ?", doctorID)
 	if err != nil {
-		log.Printf("Repository: Error fetching reviews for doctorID %d: %v", doctorID, err)
+		log.Printf("Repository: Error fetching reviews for doctorID %s: %v", doctorID, err)
 		return nil, err
 	}
 	defer rows.Close()

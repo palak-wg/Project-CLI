@@ -6,12 +6,12 @@ import "doctor-patient-cli/models"
 type ReviewRepository interface {
 	AddReview(review *models.Review) error
 	GetAllReviews() ([]models.Review, error)
-	GetReviewsByDoctorID(doctorID int) ([]models.Review, error)
+	GetReviewsByDoctorID(doctorID string) ([]models.Review, error)
 }
 
 // ReviewService defines the methods for review-related operations
 type ReviewService interface {
 	AddReview(review *models.Review) error
 	GetAllReviews() ([]models.Review, error)
-	GetReviewsByDoctorID(doctorID int) ([]models.Review, error)
+	GetReviewsByDoctorID(doctorID string) ([]models.Review, error)
 }

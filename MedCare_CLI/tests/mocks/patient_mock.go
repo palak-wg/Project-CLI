@@ -74,43 +74,43 @@ type MockPatientServiceMockRecorder struct {
 	mock *MockPatientService
 }
 
-//// NewMockPatientService creates a new mock instance.
-//func NewMockPatientService(ctrl *gomock.Controller) *MockPatientService {
-//	mock := &MockPatientService{ctrl: ctrl}
-//	mock.recorder = &MockPatientServiceMockRecorder{mock}
-//	return mock
-//}
-//
-//// EXPECT returns an object that allows the caller to indicate expected use.
-//func (m *MockPatientService) EXPECT() *MockPatientServiceMockRecorder {
-//	return m.recorder
-//}
-//
-//// GetPatientByID mocks base method.
-//func (m *MockPatientService) GetPatientByID(patientID string) (*models.Patient, error) {
-//	m.ctrl.T.Helper()
-//	ret := m.ctrl.Call(m, "GetPatientByID", patientID)
-//	ret0, _ := ret[0].(*models.Patient)
-//	ret1, _ := ret[1].(error)
-//	return ret0, ret1
-//}
-//
-//// GetPatientByID indicates an expected call of GetPatientByID.
-//func (mr *MockPatientServiceMockRecorder) GetPatientByID(patientID interface{}) *gomock.Call {
-//	mr.mock.ctrl.T.Helper()
-//	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPatientByID", reflect.TypeOf((*MockPatientService)(nil).GetPatientByID), patientID)
-//}
-//
-//// UpdatePatientDetails mocks base method.
-//func (m *MockPatientService) UpdatePatientDetails(patient *models.Patient) error {
-//	m.ctrl.T.Helper()
-//	ret := m.ctrl.Call(m, "UpdatePatientDetails", patient)
-//	ret0, _ := ret[0].(error)
-//	return ret0
-//}
-//
-//// UpdatePatientDetails indicates an expected call of UpdatePatientDetails.
-//func (mr *MockPatientServiceMockRecorder) UpdatePatientDetails(patient interface{}) *gomock.Call {
-//	mr.mock.ctrl.T.Helper()
-//	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdatePatientDetails", reflect.TypeOf((*MockPatientService)(nil).UpdatePatientDetails), patient)
-//}
+// NewMockPatientService creates a new mock instance.
+func NewMockPatientService(ctrl *gomock.Controller) *MockPatientService {
+	mock := &MockPatientService{ctrl: ctrl}
+	mock.recorder = &MockPatientServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockPatientService) EXPECT() *MockPatientServiceMockRecorder {
+	return m.recorder
+}
+
+// GetPatientByID mocks base method.
+func (m *MockPatientService) GetPatientByID(patientID string) (*models.Patient, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetPatientByID", patientID)
+	ret0, _ := ret[0].(*models.Patient)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetPatientByID indicates an expected call of GetPatientByID.
+func (mr *MockPatientServiceMockRecorder) GetPatientByID(patientID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPatientByID", reflect.TypeOf((*MockPatientService)(nil).GetPatientByID), patientID)
+}
+
+// UpdatePatientDetails mocks base method.
+func (m *MockPatientService) UpdatePatientDetails(patient *models.Patient) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdatePatientDetails", patient)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdatePatientDetails indicates an expected call of UpdatePatientDetails.
+func (mr *MockPatientServiceMockRecorder) UpdatePatientDetails(patient interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdatePatientDetails", reflect.TypeOf((*MockPatientService)(nil).UpdatePatientDetails), patient)
+}
